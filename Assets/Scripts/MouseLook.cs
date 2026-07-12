@@ -18,7 +18,7 @@ public class MouseLook : MonoBehaviour
     }
 
     // Update is called once per frame
-    void LateUpdate()
+    void Update()
     {
         // Get raw mouse movement data multiplied by sensitivity and time
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
