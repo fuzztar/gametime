@@ -2,11 +2,12 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public class Doorinteraction : MonoBehaviour
+public class Doorinteraction : MonoBehaviour, IInteractable
 {
     public float openAngle = 90f;
     public float openSpeed = 2f;
     public bool isOpen = false;
+    public Transform door;
 
     private Quaternion _closedRotation;
     private Quaternion _openRotation;
@@ -15,18 +16,14 @@ public class Doorinteraction : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        _closedRotation = transform.rotation;
-        _openRotation = Quaternion.Euler(transform.eulerAngles + new Vector3(0, openAngle, 0));
+        _closedRotation = door.rotation;
+        _openRotation = Quaternion.Euler(door.eulerAngles + new Vector3(0, openAngle, 0));
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            if (_currentCoroutine != null) StopCoroutine(_currentCoroutine);
-            _currentCoroutine = StartCoroutine(ToggleDoor());
-        }
+
     }
 
 
@@ -35,14 +32,20 @@ public class Doorinteraction : MonoBehaviour
         Quaternion targetRotation = isOpen ? _closedRotation : _openRotation;
         isOpen = !isOpen;
 
-        while (Quaternion.Angle(transform.rotation, targetRotation) > 0.01f)
+        while (Quaternion.Angle(door.rotation, targetRotation) > 0.01f)
         {
-            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * openSpeed);
+            door.rotation = Quaternion.Lerp(door.rotation, targetRotation, Time.deltaTime * openSpeed);
             yield return null;
         }
 
-        transform.rotation = targetRotation;
+        door.rotation = targetRotation;
 
+    }
+
+    public void Interact()
+    {
+        if (_currentCoroutine != null) StopCoroutine(_currentCoroutine);
+        _currentCoroutine = StartCoroutine(ToggleDoor());
     }
 
 }

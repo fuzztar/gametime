@@ -159,7 +159,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26633ae7c8165004d9964c2d204f5ec6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MouseLook
-  mouseSensitivity: 200
+  mouseSensitivity: 100
   playerBody: {fileID: 5961401311805543732}
 --- !u!1 &7185373898055678484
 GameObject:
@@ -214,7 +214,7 @@ Camera:
   m_ShutterSpeed: 0.005
   m_Aperture: 16
   m_FocusDistance: 10
-  m_FocalLength: 50
+  m_FocalLength: 20.78461
   m_BladeCount: 5
   m_Curvature: {x: 2, y: 11}
   m_BarrelClipping: 0.25
@@ -229,7 +229,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 60.000004
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -313,7 +313,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   raycastDistance: 5
   outlineMaterial: {fileID: 2100000, guid: e096a0a0c98d3894e9941eb26cc1ac92, type: 2}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 8
+  isHighlighting: 0
   crosshair: {fileID: 0}
+  crosshairOutline: {fileID: 0}
+  eTipInteractable: {fileID: 0}
+  eTipItem: {fileID: 0}
 --- !u!1 &8518021789485739736
 GameObject:
   m_ObjectHideFlags: 0

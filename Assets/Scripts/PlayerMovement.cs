@@ -46,18 +46,18 @@ public class PlayerMovement : MonoBehaviour
 
     void LateUpdate()
     {
+        if (mainCamera == null) return;
+
         if (enableCameraBob)
         {
             if (move != Vector3.zero)
             {
                 CameraBob();
-                ResetPosition();
             }
             else
             {
                 ResetPosition();
             }
-            mainCamera.LookAt(FocusTarget());
         }
     }
 
@@ -89,12 +89,5 @@ public class PlayerMovement : MonoBehaviour
     {
         if (mainCamera.localPosition == cameraStartPos) return;
         mainCamera.localPosition = Vector3.Lerp(mainCamera.localPosition, cameraStartPos, 1 * Time.deltaTime);
-    }
-
-    private Vector3 FocusTarget()
-    {
-        Vector3 pos = new Vector3(transform.position.x, transform.position.y + cameraHolder.localPosition.y, transform.position.z);
-        pos += cameraHolder.forward * 15.0f;
-        return pos;
     }
 }
