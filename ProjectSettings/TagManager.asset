@@ -5,11 +5,12 @@ TagManager:
   serializedVersion: 3
   tags:
   - Interactable
+  - Item
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Interactable
   - Water
   - UI
   - 
