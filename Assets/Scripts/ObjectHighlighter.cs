@@ -13,7 +13,6 @@ public class ObjectHighlighter : MonoBehaviour
 
     private GameObject lastHighlightedObject;
     [HideInInspector] public bool isHighlighting = false;
-    [HideInInspector] public bool pickingUp = false;
     public GameObject crosshair;
     public GameObject crosshairOutline;
     public GameObject eTipInteractable;
@@ -30,10 +29,6 @@ public class ObjectHighlighter : MonoBehaviour
             {
                 if (lastHighlightedObject.TryGetComponent<IInteractable>(out IInteractable interactable))
                 {
-                    if (lastHighlightedObject.CompareTag("Item"))
-                    {
-                        pickingUp = true;
-                    }
                     interactable.Interact();
                 } else
                 {
