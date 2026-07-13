@@ -439,18 +439,33 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 3a4023681b574934082be041440ff785,
         type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.82322
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3a4023681b574934082be041440ff785,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.82322
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3a4023681b574934082be041440ff785,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.82322
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3a4023681b574934082be041440ff785,
+        type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.22374053
+      value: -0.23404
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3a4023681b574934082be041440ff785,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.00000047190304
+      value: -0.04
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3a4023681b574934082be041440ff785,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 4.1931934
+      value: 4.24
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3a4023681b574934082be041440ff785,
         type: 3}
@@ -493,7 +508,9 @@ PrefabInstance:
       value: receptiondesk (1)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: -8700617353114198275, guid: 3a4023681b574934082be041440ff785, type: 3}
+    - {fileID: 65702495048144492, guid: 3a4023681b574934082be041440ff785, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3a4023681b574934082be041440ff785, type: 3}
