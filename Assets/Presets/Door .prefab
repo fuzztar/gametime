@@ -99,10 +99,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3919561522139313234}
-  - component: {fileID: 2885437563164061328}
   m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
+  m_Name: MovableDoor
+  m_TagString: Interactable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -123,21 +122,6 @@ Transform:
   - {fileID: 5851031496777759869}
   m_Father: {fileID: 5506878337021369939}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2885437563164061328
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 721993668987320621}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 20239eec6531d1144a7754bda5bb931d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Doorinteraction
-  openAngle: 90
-  openSpeed: 2
-  isOpen: 0
 --- !u!1 &1418138873151114825
 GameObject:
   m_ObjectHideFlags: 0
@@ -149,9 +133,11 @@ GameObject:
   - component: {fileID: 5851031496777759869}
   - component: {fileID: 985545305961619905}
   - component: {fileID: 2796238641439330314}
-  m_Layer: 0
+  - component: {fileID: 2729109687544124781}
+  - component: {fileID: 662409683155286891}
+  m_Layer: 3
   m_Name: Door
-  m_TagString: Untagged
+  m_TagString: Interactable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -229,6 +215,43 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &2729109687544124781
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1418138873151114825}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.019999998, y: 0.019999994, z: 0.019999996}
+  m_Center: {x: 0, y: 0.0000000013005557, z: -9.313226e-10}
+--- !u!114 &662409683155286891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1418138873151114825}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20239eec6531d1144a7754bda5bb931d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Doorinteraction
+  openAngle: 90
+  openSpeed: 2
+  isOpen: 0
+  door: {fileID: 3919561522139313234}
 --- !u!1 &5196583651690665972
 GameObject:
   m_ObjectHideFlags: 0
@@ -436,7 +459,7 @@ Transform:
   m_GameObject: {fileID: 6709321994593478918}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.07, y: 0, z: 2.67}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.1450478, y: 0.1450478, z: 0.1450478}
   m_ConstrainProportionsScale: 0
   m_Children:
