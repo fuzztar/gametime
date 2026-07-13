@@ -317,6 +317,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   isHighlighting: 0
+  pickingUp: 0
   crosshair: {fileID: 0}
   crosshairOutline: {fileID: 0}
   eTipInteractable: {fileID: 0}
@@ -377,7 +378,7 @@ MonoBehaviour:
   enableCameraBob: 1
   cameraBobSpeed: 0
   cameraBobAmount: 0.005
-  cameraSmooth: 75
+  cameraSmooth: 50
 --- !u!143 &818508889521915376
 CharacterController:
   m_ObjectHideFlags: 0
