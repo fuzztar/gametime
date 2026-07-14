@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 462845af8a361434f999be8203454787, type: 3}
   m_Name: KeyData
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemName: 
-  itemIcon: {fileID: 0}
-  itemPrefab: {fileID: 0}
+  itemName: key
+  itemIcon: {fileID: 21300000, guid: 25ffff44aaf688641aeffcab6c1208ea, type: 3}
+  itemPrefab: {fileID: 919132149155446097, guid: dd7c673f3931aec45bda828e571f9667,
+    type: 3}
