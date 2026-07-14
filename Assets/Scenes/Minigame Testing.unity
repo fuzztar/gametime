@@ -477,7 +477,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -2.91, y: 0.94, z: -11.27306}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: -0.36992434, y: -0.36992434, z: -0.36992434}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -1089,6 +1089,34 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1 &1366929394 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7185373898055678484, guid: 30ac8b5085ee2bc4091f4ea26256221c,
+    type: 3}
+  m_PrefabInstance: {fileID: 1989482757}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1366929398
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1366929394}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6160e973a3785bf4f9a2fa1183ef43b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectHighlighter
+  raycastDistance: 5
+  outlineMaterial: {fileID: 2100000, guid: e096a0a0c98d3894e9941eb26cc1ac92, type: 2}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 8
+  isHighlighting: 0
+  crosshair: {fileID: 396220812}
+  crosshairOutline: {fileID: 2137086892}
+  eTipInteractable: {fileID: 298395734}
+  eTipItem: {fileID: 1836916208}
 --- !u!1 &1452795782
 GameObject:
   m_ObjectHideFlags: 0
@@ -1605,28 +1633,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d42c2b2676e7de048b3206d727d57d71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1771647491
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1771647482}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6160e973a3785bf4f9a2fa1183ef43b9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ObjectHighlighter
-  raycastDistance: 5
-  outlineMaterial: {fileID: 2100000, guid: e096a0a0c98d3894e9941eb26cc1ac92, type: 2}
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 8
-  isHighlighting: 0
-  crosshair: {fileID: 396220812}
-  crosshairOutline: {fileID: 2137086892}
-  eTipInteractable: {fileID: 298395734}
-  eTipItem: {fileID: 1836916208}
 --- !u!1 &1836916208 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3626967891905389147, guid: 9733973d61a9f8c41a5a461291787105,
@@ -1860,10 +1866,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1771647486}
-    - targetCorrespondingSourceObject: {fileID: 8518021789485739736, guid: 30ac8b5085ee2bc4091f4ea26256221c,
+    - targetCorrespondingSourceObject: {fileID: 7185373898055678484, guid: 30ac8b5085ee2bc4091f4ea26256221c,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1771647491}
+      addedObject: {fileID: 1366929398}
   m_SourcePrefab: {fileID: 100100000, guid: 30ac8b5085ee2bc4091f4ea26256221c, type: 3}
 --- !u!1 &2064379230
 GameObject:
