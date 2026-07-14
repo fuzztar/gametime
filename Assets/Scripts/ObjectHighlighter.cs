@@ -75,13 +75,26 @@ public class ObjectHighlighter : MonoBehaviour
             if (lastHighlightedObject.CompareTag("Interactable") || lastHighlightedObject.CompareTag("Item"))
             {
                 Renderer rend = lastHighlightedObject.GetComponent<Renderer>();
-                List<Material> mats = new(rend.materials);
-                mats.RemoveAt(mats.Count - 1);
-                rend.materials = mats.ToArray();
+
+                if (rend != null)
+                {
+                    List<Material> mats = new(rend.materials);
+
+                    if (mats.Count > 1)
+                    {
+                        mats.RemoveAt(mats.Count - 1);
+                        rend.materials = mats.ToArray();
+                    }
+                }
             }
+
             lastHighlightedObject = null;
-            isHighlighting = false;
         }
+
+        isHighlighting = false;
+
+        // Turn off interaction UI immediately
+        ResetUI();
     }
 
     void AddHighlight(GameObject targetObject)
@@ -96,20 +109,27 @@ public class ObjectHighlighter : MonoBehaviour
 
     void TurnOnUI()
     {
-        if (crosshairOutline.activeSelf == false)
+        if (lastHighlightedObject == null)
+        {
+            ResetUI();
+            return;
+        }
+
+        if (!crosshairOutline.activeSelf)
         {
             crosshairOutline.SetActive(true);
         }
+
         if (lastHighlightedObject.CompareTag("Interactable"))
         {
-            if (eTipInteractable.activeSelf == false)
+            if (!eTipInteractable.activeSelf)
             {
                 eTipInteractable.SetActive(true);
             }
         }
         else if (lastHighlightedObject.CompareTag("Item"))
         {
-            if (eTipItem.activeSelf == false)
+            if (!eTipItem.activeSelf)
             {
                 eTipItem.SetActive(true);
             }
