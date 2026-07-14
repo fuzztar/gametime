@@ -9,6 +9,7 @@ public class HotbarSlot : MonoBehaviour
     public Sprite blankIcon;
     public GameObject highlight;
     public string hotkey = "";
+    internal static bool haskey;
 
     public bool highlighted {
         get => highlight.activeSelf;

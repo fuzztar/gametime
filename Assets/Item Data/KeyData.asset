@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: KeyData
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemName: key
-  itemIcon: {fileID: 21300000, guid: 25ffff44aaf688641aeffcab6c1208ea, type: 3}
+  itemIcon: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
   itemPrefab: {fileID: 919132149155446097, guid: dd7c673f3931aec45bda828e571f9667,
     type: 3}
