@@ -12,7 +12,11 @@ public class ObjectHighlighter : MonoBehaviour
     [SerializeField] private LayerMask layerMask;
 
     private GameObject lastHighlightedObject;
+
     [HideInInspector] public bool isHighlighting = false;
+    [HideInInspector] public bool pickingUp = false;
+    [HideInInspector] public bool uiOpen = false;
+
     public GameObject crosshair;
     public GameObject crosshairOutline;
     public GameObject eTipInteractable;
@@ -21,21 +25,38 @@ public class ObjectHighlighter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // If a minigame UI is open, hide interaction UI and stop checking interactions
+        if (uiOpen)
+        {
+            ClearHighlight();
+            ResetUI();
+            return;
+        }
+
         HighlightRaycastCheck();
+
         if (isHighlighting)
         {
             TurnOnUI();
+
             if (lastHighlightedObject != null && Input.GetKeyDown(KeyCode.E))
             {
                 if (lastHighlightedObject.TryGetComponent<IInteractable>(out IInteractable interactable))
                 {
+                    if (lastHighlightedObject.CompareTag("Item"))
+                    {
+                        pickingUp = true;
+                    }
+
                     interactable.Interact();
-                } else
+                }
+                else
                 {
                     Debug.Log("No IInteractable script found.");
                 }
             }
-        } else
+        }
+        else
         {
             ResetUI();
         }
@@ -44,10 +65,11 @@ public class ObjectHighlighter : MonoBehaviour
     void HighlightRaycastCheck()
     {
         Ray ray = new Ray(transform.position, transform.forward);
-        
+
         if (Physics.Raycast(ray, out RaycastHit hit, raycastDistance, layerMask))
         {
             GameObject targetObject = hit.collider.gameObject;
+
             if (targetObject.CompareTag("Interactable") || targetObject.CompareTag("Item"))
             {
                 if (lastHighlightedObject != targetObject)
@@ -55,9 +77,11 @@ public class ObjectHighlighter : MonoBehaviour
                     ClearHighlight();
                     AddHighlight(targetObject);
                 }
+
                 return;
             }
         }
+
         ClearHighlight();
     }
 
@@ -69,45 +93,34 @@ public class ObjectHighlighter : MonoBehaviour
             {
                 Renderer rend = lastHighlightedObject.GetComponent<Renderer>();
 
-                if (rend != null)
-                {
-                    List<Material> mats = new(rend.materials);
+                List<Material> mats = new(rend.materials);
 
-                    if (mats.Count > 1)
-                    {
-                        mats.RemoveAt(mats.Count - 1);
-                        rend.materials = mats.ToArray();
-                    }
-                }
+                mats.RemoveAt(mats.Count - 1);
+
+                rend.materials = mats.ToArray();
             }
 
             lastHighlightedObject = null;
+            isHighlighting = false;
         }
-
-        isHighlighting = false;
-
-        // Turn off interaction UI immediately
-        ResetUI();
     }
 
     void AddHighlight(GameObject targetObject)
     {
         Renderer rend = targetObject.GetComponent<Renderer>();
+
         List<Material> matArray = new(rend.materials);
+
         matArray.Add(outlineMaterial);
+
         rend.materials = matArray.ToArray();
+
         lastHighlightedObject = targetObject;
         isHighlighting = true;
     }
 
     void TurnOnUI()
     {
-        if (lastHighlightedObject == null)
-        {
-            ResetUI();
-            return;
-        }
-
         if (!crosshairOutline.activeSelf)
         {
             crosshairOutline.SetActive(true);
@@ -135,10 +148,12 @@ public class ObjectHighlighter : MonoBehaviour
         {
             crosshairOutline.SetActive(false);
         }
+
         if (eTipInteractable.activeSelf)
         {
             eTipInteractable.SetActive(false);
         }
+
         if (eTipItem.activeSelf)
         {
             eTipItem.SetActive(false);

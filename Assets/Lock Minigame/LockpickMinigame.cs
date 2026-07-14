@@ -109,13 +109,13 @@ public class LockpickMinigame : MonoBehaviour
         {
             Debug.Log("SUCCESS!");
 
-            FindObjectOfType<LockpickManager>().CompleteLock();
+            FindFirstObjectByType<LockpickManager>().CompleteLock();
         }
         else
         {
             Debug.Log("FAILED!");
 
-            FindObjectOfType<LockpickManager>().StopLockpicking();
+            FindFirstObjectByType<LockpickManager>().StopLockpicking();
         }
     }
 }
