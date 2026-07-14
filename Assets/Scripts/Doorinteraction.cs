@@ -7,6 +7,7 @@ public class Doorinteraction : MonoBehaviour, IInteractable
     public float openAngle = 90f;
     public float openSpeed = 2f;
     public bool isOpen = false;
+    public bool isLocked = true;
     public Transform door;
 
     private Quaternion _closedRotation;
@@ -44,8 +45,23 @@ public class Doorinteraction : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        if (_currentCoroutine != null) StopCoroutine(_currentCoroutine);
+        if (isLocked)
+        {
+            Debug.Log("Door is locked!");
+            return;
+        }
+
+        if (_currentCoroutine != null)
+            StopCoroutine(_currentCoroutine);
+
         _currentCoroutine = StartCoroutine(ToggleDoor());
+    }
+
+
+    public void UnlockDoor()
+    {
+        isLocked = false;
+        Debug.Log("Door unlocked!");
     }
 
 }
