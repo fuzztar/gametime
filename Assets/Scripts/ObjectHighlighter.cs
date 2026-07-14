@@ -10,6 +10,7 @@ public class ObjectHighlighter : MonoBehaviour
     [SerializeField] private float raycastDistance = 5f;
     [SerializeField] private Material outlineMaterial;
     [SerializeField] private LayerMask layerMask;
+    [SerializeField] private HotbarController hotbarController;
 
     private GameObject lastHighlightedObject;
     [HideInInspector] public bool isHighlighting = false;
@@ -29,7 +30,20 @@ public class ObjectHighlighter : MonoBehaviour
             {
                 if (lastHighlightedObject.TryGetComponent<IInteractable>(out IInteractable interactable))
                 {
-                    interactable.Interact();
+                    if (hotbarController.slotsFilled < hotbarController.totalSlots)
+                    {
+                        interactable.Interact();
+                    } else
+                    {
+                        if (hotbarController.inventoryFullText.activeSelf)
+                        {
+                            hotbarController.inventoryFullText.SetActive(false);
+                            hotbarController.inventoryFullText.SetActive(true);
+                        } else
+                        {
+                            hotbarController.inventoryFullText.SetActive(true);
+                        }
+                    }
                 } else
                 {
                     Debug.Log("No IInteractable script found.");
