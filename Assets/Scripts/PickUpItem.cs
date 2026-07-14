@@ -4,13 +4,10 @@ using UnityEngine;
 public class PickUpItem : MonoBehaviour, IInteractable
 {
     public ItemData itemData;
-    [HideInInspector] public HotbarSlot hotbarSlot;
+    public HotbarController hotbarController;
 
     public void Interact()
     {
-        pickedUp?.Invoke(this);
+        gameObject.SetActive(false);
     }
-
-    public delegate void Status(PickUpItem what);
-    public static event Status pickedUp;
 }

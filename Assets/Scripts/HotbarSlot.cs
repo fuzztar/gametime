@@ -1,49 +1,36 @@
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
-using UI = UnityEngine.UI;
+using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class HotbarSlot : MonoBehaviour
 {
-    public ItemData itemData { get; private set; }
-    [HideInInspector] public PickUpItem pickUpItem;
-    public UI.Image icon;
-    public Sprite blankIcon;
-    public GameObject highlight;
-    public string hotkey = "";
+    public ItemData itemdata;
+    public Sprite itemIcon;
+    public ObjectHighlighter highlighterScript;
+    public HotbarController hotbarController;
+    private Sprite spriteComponent;
 
-    public bool highlighted {
-        get => highlight.activeSelf;
-        set {  highlight.SetActive(value); } 
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+        
     }
 
-    public void AttachItem(ItemData item)
+    // Update is called once per frame
+    void Update()
     {
-        itemData = item;
-        icon.sprite = itemData.itemIcon;
-        pickUpItem.hotbarSlot = this;
-        Collider objectCollider = pickUpItem.gameObject.GetComponent<Collider>();
-        objectCollider.enabled = false;
-    }
-
-    public void UseItem(ItemData item)
-    {
-        itemData = item;
-        icon.sprite = blankIcon;
-        pickUpItem.hotbarSlot = null;
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyUp(hotkey))
+        if (highlighterScript.pickingUp)
         {
-            if (GetComponentInParent<HotbarController>().currentSlot != this)
-            {
-                GetComponentInParent<HotbarController>().RemoveSlot();
-                GetComponentInParent<HotbarController>().SetSlot(this);
-            } else
-            {
-                GetComponentInParent<HotbarController>().RemoveSlot();
-            }
-            
+            ReplaceSprite();
+            highlighterScript.pickingUp = false;
         }
+    }
+
+    void ReplaceSprite()
+    {
+        spriteComponent = gameObject.transform.GetChild(1).gameObject.GetComponent<Sprite>();
+        spriteComponent = itemIcon;
     }
 }

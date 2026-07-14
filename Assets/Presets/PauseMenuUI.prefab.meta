@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Presets/PauseMenuUI.prefab.meta
 guid: 973eb0238c599ae469d32c32a22eb7e3
+========
+guid: ca2900daa1a6aaf4992012ab6aefb2ac
+>>>>>>>> d356486882730f35b8ce8a2172c9c0bec3800a96:Assets/Presets/Cube.prefab.meta
 PrefabImporter:
   externalObjects: {}
   userData: 
