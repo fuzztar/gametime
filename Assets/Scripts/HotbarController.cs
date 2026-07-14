@@ -1,90 +1,50 @@
-using NUnit.Framework;
-using System;
+using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
 public class HotbarController : MonoBehaviour
 {
-    [HideInInspector] public List slots = new List();
+    [HideInInspector] public HotbarSlot currentSlot;
 
-    public GameObject slot1;
-    public GameObject slot2;
-    public GameObject slot3;
-
-    private GameObject highlight;
-
-    private GameObject currentSlot;
+    public GameObject grip;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-
+        PickUpItem.pickedUp += Collect;
     }
 
-    // Update is called once per frame
-    void Update()
+    void Collect(PickUpItem what)
     {
-        if (Input.GetKey(KeyCode.Alpha1))
+        if (!this) { PickUpItem.pickedUp -= Collect; return; }
+        foreach (var slot in GetComponentsInChildren<HotbarSlot>())
         {
-            if (currentSlot != slot1)
+            if (slot.itemData == null)
             {
                 RemoveSlot();
-                currentSlot = slot1;
-                SetSlot();
-            } else
-            {
-                RemoveSlot();
-                currentSlot = null;
-            }
-        } else if (Input.GetKey(KeyCode.Alpha2))
-        {
-            if (currentSlot != slot2)
-            {
-                RemoveSlot();
-                currentSlot = slot2;
-                SetSlot();
-            } else
-            {
-                RemoveSlot();
-                currentSlot = null;
-            }
-        } else if (Input.GetKey(KeyCode.Alpha3))
-        {
-            if (currentSlot != slot3)
-            {
-                RemoveSlot();
-                currentSlot = slot3;
-                SetSlot();
-            } else
-            {
-                RemoveSlot();
-                currentSlot = null;
+                slot.pickUpItem = what;
+                slot.AttachItem(what.itemData);
+                SetSlot(slot);
+                break;
             }
         }
-
     }
 
-    void SetSlot()
+    public void SetSlot(HotbarSlot slot)
+    {
+        currentSlot = slot;
+        if (slot != null) { slot.highlighted = true; }
+        currentSlot.pickUpItem.gameObject.SetActive(true);
+    }
+
+    public void RemoveSlot()
     {
         if (currentSlot != null)
         {
-            highlight = currentSlot.transform.GetChild(0).gameObject;
-            highlight.SetActive(true);
+            currentSlot.highlighted = false;
+            currentSlot.pickUpItem.gameObject.SetActive(false);
+            currentSlot = null;
         }
-        
     }
 
-    void RemoveSlot()
-    {
-        if (highlight != null)
-        {
-            highlight.SetActive(false);
-        }
-        currentSlot = null;
-    }
-
-    void addItemToSlot()
-    {
-
-    }
 }
