@@ -115,20 +115,18 @@ public class ObjectHighlighter : MonoBehaviour
             }
 
             lastHighlightedObject = null;
-            isHighlighting = false;
         }
+        isHighlighting = false;
+        // Turn off interaction UI immediately
+        ResetUI();
     }
 
     void AddHighlight(GameObject targetObject)
     {
         Renderer rend = targetObject.GetComponent<Renderer>();
-
         List<Material> matArray = new(rend.materials);
-
         matArray.Add(outlineMaterial);
-
         rend.materials = matArray.ToArray();
-
         lastHighlightedObject = targetObject;
         isHighlighting = true;
     }
