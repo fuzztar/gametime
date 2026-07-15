@@ -1,8 +1,4 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class ObjectHighlighter : MonoBehaviour
@@ -12,6 +8,7 @@ public class ObjectHighlighter : MonoBehaviour
     [SerializeField] private LayerMask layerMask;
 
     private GameObject lastHighlightedObject;
+    private Renderer lastRenderer;
 
     [HideInInspector] public bool isHighlighting = false;
     [HideInInspector] public bool pickingUp = false;
@@ -22,10 +19,8 @@ public class ObjectHighlighter : MonoBehaviour
     public GameObject eTipInteractable;
     public GameObject eTipItem;
 
-    // Update is called once per frame
     void Update()
     {
-        // If a minigame UI is open, hide interaction UI and stop checking interactions
         if (uiOpen)
         {
             ClearHighlight();
@@ -85,38 +80,46 @@ public class ObjectHighlighter : MonoBehaviour
         ClearHighlight();
     }
 
-    void ClearHighlight()
-    {
-        if (lastHighlightedObject != null)
-        {
-            if (lastHighlightedObject.CompareTag("Interactable") || lastHighlightedObject.CompareTag("Item"))
-            {
-                Renderer rend = lastHighlightedObject.GetComponent<Renderer>();
-
-                List<Material> mats = new(rend.materials);
-
-                mats.RemoveAt(mats.Count - 1);
-
-                rend.materials = mats.ToArray();
-            }
-
-            lastHighlightedObject = null;
-            isHighlighting = false;
-        }
-    }
-
     void AddHighlight(GameObject targetObject)
     {
         Renderer rend = targetObject.GetComponent<Renderer>();
 
-        List<Material> matArray = new(rend.materials);
+        if (rend == null)
+        {
+            rend = targetObject.GetComponentInChildren<Renderer>();
+        }
 
-        matArray.Add(outlineMaterial);
+        if (rend == null)
+            return;
 
-        rend.materials = matArray.ToArray();
+        List<Material> mats = new(rend.materials);
 
+        mats.Add(outlineMaterial);
+
+        rend.materials = mats.ToArray();
+
+        lastRenderer = rend;
         lastHighlightedObject = targetObject;
         isHighlighting = true;
+    }
+
+    void ClearHighlight()
+    {
+        if (lastHighlightedObject == null || lastRenderer == null)
+            return;
+
+        List<Material> mats = new(lastRenderer.materials);
+
+        if (mats.Count > 0)
+        {
+            mats.RemoveAt(mats.Count - 1);
+        }
+
+        lastRenderer.materials = mats.ToArray();
+
+        lastHighlightedObject = null;
+        lastRenderer = null;
+        isHighlighting = false;
     }
 
     void TurnOnUI()
@@ -125,6 +128,9 @@ public class ObjectHighlighter : MonoBehaviour
         {
             crosshairOutline.SetActive(true);
         }
+
+        if (lastHighlightedObject == null)
+            return;
 
         if (lastHighlightedObject.CompareTag("Interactable"))
         {
@@ -144,19 +150,8 @@ public class ObjectHighlighter : MonoBehaviour
 
     void ResetUI()
     {
-        if (crosshairOutline.activeSelf)
-        {
-            crosshairOutline.SetActive(false);
-        }
-
-        if (eTipInteractable.activeSelf)
-        {
-            eTipInteractable.SetActive(false);
-        }
-
-        if (eTipItem.activeSelf)
-        {
-            eTipItem.SetActive(false);
-        }
+        crosshairOutline.SetActive(false);
+        eTipInteractable.SetActive(false);
+        eTipItem.SetActive(false);
     }
 }
