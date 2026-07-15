@@ -20,6 +20,8 @@ public class LockpickManager : MonoBehaviour
 
         lockpickCanvas.SetActive(true);
 
+        FindFirstObjectByType<ObjectHighlighter>().uiOpen = true;
+
         minigame.StartMinigame();
 
         Debug.Log("Lockpicking started!");
@@ -43,6 +45,8 @@ public class LockpickManager : MonoBehaviour
         Debug.Log("Disabling canvas: " + lockpickCanvas.name);
 
         lockpickCanvas.SetActive(false);
+
+        FindFirstObjectByType<ObjectHighlighter>().uiOpen = false;
 
         playerMovement.enabled = true;
         playerInteract.canInteract = true;
