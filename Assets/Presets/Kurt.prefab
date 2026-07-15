@@ -162,6 +162,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MouseLook
   mouseSensitivity: 100
   playerBody: {fileID: 5961401311805543732}
+  canLook: 1
 --- !u!1 &6802708684460147551
 GameObject:
   m_ObjectHideFlags: 0
@@ -361,7 +362,9 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 8
+  hotbarController: {fileID: 0}
   isHighlighting: 0
+  uiOpen: 0
   crosshair: {fileID: 0}
   crosshairOutline: {fileID: 0}
   eTipInteractable: {fileID: 0}
