@@ -10,11 +10,11 @@ public class ObjectHighlighter : MonoBehaviour
     [SerializeField] private float raycastDistance = 5f;
     [SerializeField] private Material outlineMaterial;
     [SerializeField] private LayerMask layerMask;
+    [SerializeField] private HotbarController hotbarController;
 
     private GameObject lastHighlightedObject;
 
     [HideInInspector] public bool isHighlighting = false;
-    [HideInInspector] public bool pickingUp = false;
     [HideInInspector] public bool uiOpen = false;
 
     public GameObject crosshair;
@@ -43,12 +43,22 @@ public class ObjectHighlighter : MonoBehaviour
             {
                 if (lastHighlightedObject.TryGetComponent<IInteractable>(out IInteractable interactable))
                 {
-                    if (lastHighlightedObject.CompareTag("Item"))
+                    if (hotbarController.slotsFilled < hotbarController.totalSlots)
                     {
-                        pickingUp = true;
+                        interactable.Interact();
                     }
-
-                    interactable.Interact();
+                    else
+                    {
+                        if (hotbarController.inventoryFullText.activeSelf)
+                        {
+                            hotbarController.inventoryFullText.SetActive(false);
+                            hotbarController.inventoryFullText.SetActive(true);
+                        }
+                        else
+                        {
+                            hotbarController.inventoryFullText.SetActive(true);
+                        }
+                    }
                 }
                 else
                 {
@@ -93,11 +103,15 @@ public class ObjectHighlighter : MonoBehaviour
             {
                 Renderer rend = lastHighlightedObject.GetComponent<Renderer>();
 
-                List<Material> mats = new(rend.materials);
-
-                mats.RemoveAt(mats.Count - 1);
-
-                rend.materials = mats.ToArray();
+                if (rend != null)
+                {
+                    List<Material> mats = new(rend.materials);
+                    if (mats.Count > 1)
+                    {
+                        mats.RemoveAt(mats.Count - 1);
+                        rend.materials = mats.ToArray();
+                    }
+                }
             }
 
             lastHighlightedObject = null;
@@ -121,6 +135,11 @@ public class ObjectHighlighter : MonoBehaviour
 
     void TurnOnUI()
     {
+        if (lastHighlightedObject == null)
+        {
+            ResetUI();
+            return;
+        }
         if (!crosshairOutline.activeSelf)
         {
             crosshairOutline.SetActive(true);
