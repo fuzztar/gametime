@@ -5,6 +5,9 @@ public class HotbarController : MonoBehaviour
 {
     [HideInInspector] public HotbarSlot currentSlot;
 
+    [HideInInspector] public int slotsFilled;
+    public int totalSlots;
+    public GameObject inventoryFullText;
     public GameObject grip;
 
 
