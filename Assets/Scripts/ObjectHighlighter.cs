@@ -6,12 +6,12 @@ public class ObjectHighlighter : MonoBehaviour
     [SerializeField] private float raycastDistance = 5f;
     [SerializeField] private Material outlineMaterial;
     [SerializeField] private LayerMask layerMask;
+    [SerializeField] private HotbarController hotbarController;
 
     private GameObject lastHighlightedObject;
     private Renderer lastRenderer;
 
     [HideInInspector] public bool isHighlighting = false;
-    [HideInInspector] public bool pickingUp = false;
     [HideInInspector] public bool uiOpen = false;
 
     public GameObject crosshair;
@@ -38,12 +38,22 @@ public class ObjectHighlighter : MonoBehaviour
             {
                 if (lastHighlightedObject.TryGetComponent<IInteractable>(out IInteractable interactable))
                 {
-                    if (lastHighlightedObject.CompareTag("Item"))
+                    if (hotbarController.slotsFilled < hotbarController.totalSlots)
                     {
-                        pickingUp = true;
+                        interactable.Interact();
                     }
-
-                    interactable.Interact();
+                    else
+                    {
+                        if (hotbarController.inventoryFullText.activeSelf)
+                        {
+                            hotbarController.inventoryFullText.SetActive(false);
+                            hotbarController.inventoryFullText.SetActive(true);
+                        }
+                        else
+                        {
+                            hotbarController.inventoryFullText.SetActive(true);
+                        }
+                    }
                 }
                 else
                 {
@@ -99,31 +109,43 @@ public class ObjectHighlighter : MonoBehaviour
         rend.materials = mats.ToArray();
 
         lastRenderer = rend;
+
         lastHighlightedObject = targetObject;
         isHighlighting = true;
     }
-
     void ClearHighlight()
     {
-        if (lastHighlightedObject == null || lastRenderer == null)
-            return;
-
-        List<Material> mats = new(lastRenderer.materials);
-
-        if (mats.Count > 0)
+        if (lastHighlightedObject != null)
         {
-            mats.RemoveAt(mats.Count - 1);
+            if (lastHighlightedObject.CompareTag("Interactable") || lastHighlightedObject.CompareTag("Item"))
+            {
+                Renderer rend = lastHighlightedObject.GetComponent<Renderer>();
+
+                if (rend != null)
+                {
+                    List<Material> mats = new(rend.materials);
+                    if (mats.Count > 1)
+                    {
+                        mats.RemoveAt(mats.Count - 1);
+                        rend.materials = mats.ToArray();
+                    }
+                }
+            }
+
+            lastHighlightedObject = null;
         }
-
-        lastRenderer.materials = mats.ToArray();
-
-        lastHighlightedObject = null;
-        lastRenderer = null;
         isHighlighting = false;
+        // Turn off interaction UI immediately
+        ResetUI();
     }
 
     void TurnOnUI()
     {
+        if (lastHighlightedObject == null)
+        {
+            ResetUI();
+            return;
+        }
         if (!crosshairOutline.activeSelf)
         {
             crosshairOutline.SetActive(true);

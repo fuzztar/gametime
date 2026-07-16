@@ -162,6 +162,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MouseLook
   mouseSensitivity: 100
   playerBody: {fileID: 5961401311805543732}
+  canLook: 1
 --- !u!1 &6802708684460147551
 GameObject:
   m_ObjectHideFlags: 0
@@ -361,7 +362,9 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 8
+  hotbarController: {fileID: 0}
   isHighlighting: 0
+  uiOpen: 0
   crosshair: {fileID: 0}
   crosshairOutline: {fileID: 0}
   eTipInteractable: {fileID: 0}
@@ -376,7 +379,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5961401311805543732}
   - component: {fileID: 1998930908826952277}
-  - component: {fileID: 818508889521915376}
+  - component: {fileID: 2120189998382806864}
   m_Layer: 0
   m_Name: Kurt
   m_TagString: Untagged
@@ -413,17 +416,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d42c2b2676e7de048b3206d727d57d71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controller: {fileID: 818508889521915376}
+  controller: {fileID: 2120189998382806864}
   walkSpeed: 6
   runSpeed: 9
   crouchSpeed: 3
+  gravity: 9.81
   mainCamera: {fileID: 5124195882139523991}
   cameraHolder: {fileID: 4861020140452123382}
   enableCameraBob: 1
   cameraBobSpeed: 0
   cameraBobAmount: 0.005
   cameraSmooth: 50
---- !u!143 &818508889521915376
+--- !u!143 &2120189998382806864
 CharacterController:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
