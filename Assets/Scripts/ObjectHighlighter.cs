@@ -1,4 +1,8 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ObjectHighlighter : MonoBehaviour
@@ -9,7 +13,6 @@ public class ObjectHighlighter : MonoBehaviour
     [SerializeField] private HotbarController hotbarController;
 
     private GameObject lastHighlightedObject;
-    private Renderer lastRenderer;
 
     [HideInInspector] public bool isHighlighting = false;
     [HideInInspector] public bool uiOpen = false;
@@ -19,8 +22,10 @@ public class ObjectHighlighter : MonoBehaviour
     public GameObject eTipInteractable;
     public GameObject eTipItem;
 
+    // Update is called once per frame
     void Update()
     {
+        // If a minigame UI is open, hide interaction UI and stop checking interactions
         if (uiOpen)
         {
             ClearHighlight();
@@ -90,29 +95,6 @@ public class ObjectHighlighter : MonoBehaviour
         ClearHighlight();
     }
 
-    void AddHighlight(GameObject targetObject)
-    {
-        Renderer rend = targetObject.GetComponent<Renderer>();
-
-        if (rend == null)
-        {
-            rend = targetObject.GetComponentInChildren<Renderer>();
-        }
-
-        if (rend == null)
-            return;
-
-        List<Material> mats = new(rend.materials);
-
-        mats.Add(outlineMaterial);
-
-        rend.materials = mats.ToArray();
-
-        lastRenderer = rend;
-
-        lastHighlightedObject = targetObject;
-        isHighlighting = true;
-    }
     void ClearHighlight()
     {
         if (lastHighlightedObject != null)
@@ -139,6 +121,16 @@ public class ObjectHighlighter : MonoBehaviour
         ResetUI();
     }
 
+    void AddHighlight(GameObject targetObject)
+    {
+        Renderer rend = targetObject.GetComponent<Renderer>();
+        List<Material> matArray = new(rend.materials);
+        matArray.Add(outlineMaterial);
+        rend.materials = matArray.ToArray();
+        lastHighlightedObject = targetObject;
+        isHighlighting = true;
+    }
+
     void TurnOnUI()
     {
         if (lastHighlightedObject == null)
@@ -150,9 +142,6 @@ public class ObjectHighlighter : MonoBehaviour
         {
             crosshairOutline.SetActive(true);
         }
-
-        if (lastHighlightedObject == null)
-            return;
 
         if (lastHighlightedObject.CompareTag("Interactable"))
         {
@@ -172,8 +161,19 @@ public class ObjectHighlighter : MonoBehaviour
 
     void ResetUI()
     {
-        crosshairOutline.SetActive(false);
-        eTipInteractable.SetActive(false);
-        eTipItem.SetActive(false);
+        if (crosshairOutline.activeSelf)
+        {
+            crosshairOutline.SetActive(false);
+        }
+
+        if (eTipInteractable.activeSelf)
+        {
+            eTipInteractable.SetActive(false);
+        }
+
+        if (eTipItem.activeSelf)
+        {
+            eTipItem.SetActive(false);
+        }
     }
 }
