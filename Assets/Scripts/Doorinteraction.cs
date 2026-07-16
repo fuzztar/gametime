@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class Doorinteraction : MonoBehaviour, IInteractable
+public class DoorInteraction : MonoBehaviour, IInteractable
 {
     [Header("Door Settings")]
     public float openAngle = 90f;
@@ -15,54 +15,40 @@ public class Doorinteraction : MonoBehaviour, IInteractable
     [Header("Door Object")]
     public Transform door;
 
+    private Quaternion closedRotation;
+    private Quaternion openRotation;
 
-    private Quaternion _closedRotation;
-    private Quaternion _openRotation;
+    private Coroutine currentCoroutine;
 
-    private Coroutine _currentCoroutine;
-
-
-    void Start()
+    private void Start()
     {
-        _closedRotation = door.rotation;
+        closedRotation = door.rotation;
 
-        _openRotation =
-            Quaternion.Euler(
-                door.eulerAngles +
-                new Vector3(0, openAngle, 0)
-            );
+        openRotation = Quaternion.Euler(
+            door.eulerAngles + new Vector3(0, openAngle, 0)
+        );
     }
-
-
 
     private IEnumerator ToggleDoor()
     {
         Quaternion targetRotation =
-            isOpen ? _closedRotation : _openRotation;
-
+            isOpen ? closedRotation : openRotation;
 
         isOpen = !isOpen;
 
-
-        while (Quaternion.Angle(
-            door.rotation,
-            targetRotation) > 0.01f)
+        while (Quaternion.Angle(door.rotation, targetRotation) > 0.01f)
         {
-            door.rotation =
-                Quaternion.Lerp(
-                    door.rotation,
-                    targetRotation,
-                    Time.deltaTime * openSpeed
-                );
+            door.rotation = Quaternion.Lerp(
+                door.rotation,
+                targetRotation,
+                Time.deltaTime * openSpeed
+            );
 
             yield return null;
         }
 
-
         door.rotation = targetRotation;
     }
-
-
 
     public void Interact()
     {
@@ -72,18 +58,13 @@ public class Doorinteraction : MonoBehaviour, IInteractable
             return;
         }
 
-
-        if (_currentCoroutine != null)
+        if (currentCoroutine != null)
         {
-            StopCoroutine(_currentCoroutine);
+            StopCoroutine(currentCoroutine);
         }
 
-
-        _currentCoroutine =
-            StartCoroutine(ToggleDoor());
+        currentCoroutine = StartCoroutine(ToggleDoor());
     }
-
-
 
     public void UnlockDoor()
     {
