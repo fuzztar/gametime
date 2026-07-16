@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class LockInteractable : MonoBehaviour
 {
-    public Doorinteraction connectedDoor;
+    public DoorInteraction connectedDoor;
 
     public void Interact()
     {
