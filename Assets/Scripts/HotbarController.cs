@@ -37,7 +37,10 @@ public class HotbarController : MonoBehaviour
     {
         currentSlot = slot;
         if (slot != null) { slot.highlighted = true; }
-        currentSlot.pickUpItem.gameObject.SetActive(true);
+        if (currentSlot.pickUpItem != null)
+        {
+            currentSlot.pickUpItem.gameObject.SetActive(true);
+        }
     }
 
     public void RemoveSlot()
@@ -45,7 +48,10 @@ public class HotbarController : MonoBehaviour
         if (currentSlot != null)
         {
             currentSlot.highlighted = false;
-            currentSlot.pickUpItem.gameObject.SetActive(false);
+            if (currentSlot.pickUpItem != null)
+            {
+                currentSlot.pickUpItem.gameObject.SetActive(false);
+            }
             currentSlot = null;
         }
     }

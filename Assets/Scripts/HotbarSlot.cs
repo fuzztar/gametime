@@ -23,6 +23,7 @@ public class HotbarSlot : MonoBehaviour
         pickUpItem.hotbarSlot = this;
         Collider objectCollider = pickUpItem.gameObject.GetComponent<Collider>();
         objectCollider.enabled = false;
+        GetComponentInParent<HotbarController>().slotsFilled += 1;
     }
 
     public void UseItem(ItemData item)
@@ -30,6 +31,7 @@ public class HotbarSlot : MonoBehaviour
         itemData = item;
         icon.sprite = blankIcon;
         pickUpItem.hotbarSlot = null;
+        GetComponentInParent<HotbarController>().slotsFilled -= 1;
     }
 
     private void Update()
