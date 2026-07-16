@@ -4,7 +4,7 @@ public class ComputerInteractable : MonoBehaviour, IInteractable
 {
     public bool hacked = false;
 
-    public Doorinteraction linkedDoor;
+    public DoorInteraction linkedDoor;
 
 
     public void Interact()
