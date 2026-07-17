@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PushPuzzleGoal : MonoBehaviour
 {
-    public Doorinteraction linkedDoor;
+    public DoorInteraction linkedDoor;
 
 
     [Header("Visual Feedback")]

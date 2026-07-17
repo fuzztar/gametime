@@ -12,7 +12,7 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: DefaultCompany
+  companyName: Gaminc
   productName: Game Time
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
@@ -959,7 +959,7 @@ PlayerSettings:
   qnxGraphicConfPath: 
   apiCompatibilityLevel: 6
   captureStartupLogs: {}
-  activeInputHandler: 2
+  activeInputHandler: 0
   windowsGamepadBackendHint: 0
   cloudProjectId: 748838e4-4ec2-4d19-9f39-bed0a9ff2d21
   framebufferDepthMemorylessMode: 0

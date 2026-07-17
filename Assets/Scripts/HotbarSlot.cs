@@ -31,7 +31,7 @@ public class HotbarSlot : MonoBehaviour
         itemData = item;
         icon.sprite = blankIcon;
         pickUpItem.hotbarSlot = null;
-        GetComponentInParent<HotbarController>().slotsFilled -=1;
+        GetComponentInParent<HotbarController>().slotsFilled -= 1;
     }
 
     private void Update()

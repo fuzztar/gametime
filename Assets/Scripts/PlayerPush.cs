@@ -2,53 +2,40 @@ using UnityEngine;
 
 public class PlayerPush : MonoBehaviour
 {
-    public float pushForce = 50f;
+    [Header("Push Settings")]
+    public float pushForce = 4f;
     public float maxPushSpeed = 3f;
-
-    private CharacterController controller;
-
-
-    void Start()
-    {
-        controller = GetComponent<CharacterController>();
-    }
-
+    public float acceleration = 8f;
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
         Rigidbody rb = hit.collider.attachedRigidbody;
 
-
-        // Ignore objects without rigidbodies
+        // Ignore objects without rigidbodies or kinematic rigidbodies
         if (rb == null || rb.isKinematic)
             return;
 
-
-        // Prevent pushing objects downward
+        // Don't push downward
         if (hit.moveDirection.y < -0.3f)
             return;
 
+        // Only push objects on the horizontal plane
+        Vector3 pushDirection = new Vector3(hit.moveDirection.x, 0f, hit.moveDirection.z).normalized;
 
-        // Get horizontal push direction
-        Vector3 pushDirection = new Vector3(
-            hit.moveDirection.x,
-            0,
-            hit.moveDirection.z
+        if (pushDirection.sqrMagnitude < 0.01f)
+            return;
+
+        // Desired horizontal velocity
+        Vector3 desiredVelocity = pushDirection * maxPushSpeed;
+
+        // Preserve the object's existing vertical movement
+        desiredVelocity.y = rb.linearVelocity.y;
+
+        // Smoothly move toward the desired velocity
+        rb.linearVelocity = Vector3.Lerp(
+            rb.linearVelocity,
+            desiredVelocity,
+            acceleration * Time.fixedDeltaTime
         );
-
-
-        // Smooth push force
-        rb.AddForce(
-     pushDirection * pushForce,
-     ForceMode.Impulse
- );
-
-
-        // Limit maximum speed
-        if (rb.linearVelocity.magnitude > maxPushSpeed)
-        {
-            rb.linearVelocity =
-                rb.linearVelocity.normalized * maxPushSpeed;
-        }
     }
 }
