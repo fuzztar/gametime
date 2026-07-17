@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -12,7 +11,6 @@ public class PlayerMovement : MonoBehaviour
     public float crouchSpeed = 3f;
     private float currentSpeed;
 
-    [SerializeField] private float gravity = 9.81f;
     [SerializeField] private Transform mainCamera;
     [SerializeField] private Transform cameraHolder;
     [SerializeField] private bool enableCameraBob = true;
@@ -37,7 +35,6 @@ public class PlayerMovement : MonoBehaviour
 
         // Calculate the movement direction
         move = transform.right * horizontalInput + transform.forward * verticalInput;
-        move.y -= gravity;
 
         // Change the speed & camera speed to match whether the player is sprinting, crouching, or neither, and bob the camera based on that
         SetSpeed();
@@ -45,11 +42,6 @@ public class PlayerMovement : MonoBehaviour
 
         // Move the character
         controller.Move(currentSpeed * Time.deltaTime * move);
-
-        if (controller.isGrounded == false)
-        {
-            
-        }
     }
 
     void LateUpdate()
@@ -58,7 +50,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (enableCameraBob)
         {
-            if (move.x != 0 && move.y != 0)
+            if (move != Vector3.zero)
             {
                 CameraBob();
             }

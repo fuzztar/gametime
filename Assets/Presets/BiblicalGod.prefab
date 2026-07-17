@@ -125,5 +125,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33e844c861ec8f245886c7d7f0153942, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PickUpItem
-  itemData: {fileID: 0}
+  itemData: {fileID: 11400000, guid: a78edbbf406525d4f9e3ef6ea9ef4c9a, type: 2}
   hotbarSlot: {fileID: 0}

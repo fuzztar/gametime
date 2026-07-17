@@ -43,21 +43,27 @@ public class ObjectHighlighter : MonoBehaviour
             {
                 if (lastHighlightedObject.TryGetComponent<IInteractable>(out IInteractable interactable))
                 {
-                    if (hotbarController.slotsFilled < hotbarController.totalSlots)
+                    if (lastHighlightedObject.CompareTag("Item"))
                     {
-                        interactable.Interact();
-                    }
-                    else
-                    {
-                        if (hotbarController.inventoryFullText.activeSelf)
+                        if (hotbarController.slotsFilled < hotbarController.totalSlots)
                         {
-                            hotbarController.inventoryFullText.SetActive(false);
-                            hotbarController.inventoryFullText.SetActive(true);
+                            interactable.Interact();
                         }
                         else
                         {
-                            hotbarController.inventoryFullText.SetActive(true);
+                            if (hotbarController.inventoryFullText.activeSelf)
+                            {
+                                hotbarController.inventoryFullText.SetActive(false);
+                                hotbarController.inventoryFullText.SetActive(true);
+                            }
+                            else
+                            {
+                                hotbarController.inventoryFullText.SetActive(true);
+                            }
                         }
+                    } else if (lastHighlightedObject.CompareTag("Interactable"))
+                    {
+                        interactable.Interact();
                     }
                 }
                 else
