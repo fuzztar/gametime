@@ -17,6 +17,7 @@ public class LevelMove : MonoBehaviour
             print("Switching Scene to " + sceneBuildIndex);
             SceneManager.LoadScene(sceneBuildIndex, LoadSceneMode.Single);
         }
+
     }
 
 }
