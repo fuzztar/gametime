@@ -20,6 +20,8 @@ public class DoorInteraction : MonoBehaviour, IInteractable
 
     private Coroutine currentCoroutine;
 
+    public ScrollingText scrollingText;
+
     private void Start()
     {
         closedRotation = door.rotation;
@@ -55,6 +57,8 @@ public class DoorInteraction : MonoBehaviour, IInteractable
         if (locked)
         {
             Debug.Log("Door is locked!");
+            scrollingText.itemInfo = new string[] { "The door is locked."};
+            scrollingText.gameObject.SetActive(true);
             return;
         }
 
