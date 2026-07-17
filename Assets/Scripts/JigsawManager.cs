@@ -142,8 +142,14 @@ public class JigsawManager : MonoBehaviour
 
     public void OpenPuzzle()
     {
+        Debug.Log("OPEN PUZZLE CALLED");
+
+
         if (PuzzleComplete)
             return;
+
+
+        completedPieces = 0;
 
 
         puzzlePanel.SetActive(true);
@@ -172,6 +178,9 @@ public class JigsawManager : MonoBehaviour
 
     private void ScatterPieces()
     {
+        Debug.Log("SCATTERING PIECES");
+
+
         foreach (JigsawPiece piece in pieces)
         {
             RectTransform rect =
@@ -188,6 +197,13 @@ public class JigsawManager : MonoBehaviour
 
             rect.anchoredPosition =
                 new Vector2(randomX, randomY);
+
+
+            Debug.Log(
+                piece.name +
+                " moved to "
+                + rect.anchoredPosition
+            );
         }
     }
 
