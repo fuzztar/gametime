@@ -10,6 +10,8 @@ public class TextInteract : MonoBehaviour, IInteractable
         if (text != null)
         {
             scrollingText.itemInfo = text;
+            scrollingText.currentObject = this.gameObject;
+            scrollingText.isConditional = false;
             scrollingText.gameObject.SetActive(true);
         }
     }

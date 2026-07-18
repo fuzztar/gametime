@@ -1,13 +1,31 @@
+using System.Collections;
 using UnityEngine;
 
 public class HackingManager : MonoBehaviour
 {
+    [Header("Hacking UI")]
     public GameObject hackingCanvas;
     public HackingMinigame minigame;
 
+
+    [Header("Player")]
     public PlayerMovement playerMovement;
 
+
+
+    [Header("Completion Audio")]
+    [SerializeField] private AudioSource hackingSoundSource;
+    [SerializeField] private AudioSource hackingVoiceSource;
+
+    [SerializeField] private AudioClip completionSound;
+    [SerializeField] private AudioClip completionVoiceLine;
+
+    [SerializeField] private float delayBeforeVoice = 0f;
+
+
+
     private ComputerInteractable currentComputer;
+
 
 
     public void StartHacking(ComputerInteractable computer)
@@ -62,6 +80,9 @@ public class HackingManager : MonoBehaviour
         Debug.Log("Hack completed!");
 
 
+        StartCoroutine(PlayCompletionSequence());
+
+
         if (currentComputer != null)
         {
             currentComputer.HackComplete();
@@ -73,20 +94,54 @@ public class HackingManager : MonoBehaviour
 
 
 
+    private IEnumerator PlayCompletionSequence()
+    {
+        // Play success sound
+        if (completionSound != null &&
+            hackingSoundSource != null)
+        {
+            hackingSoundSource.PlayOneShot(
+                completionSound
+            );
+        }
+
+
+        // Wait before voice line
+        if (delayBeforeVoice > 0)
+        {
+            yield return new WaitForSeconds(
+                delayBeforeVoice
+            );
+        }
+
+
+        // Play voice line
+        if (completionVoiceLine != null &&
+            hackingVoiceSource != null)
+        {
+            hackingVoiceSource.PlayOneShot(
+                completionVoiceLine
+            );
+        }
+    }
+
+
+
     public void StopHacking()
     {
         Debug.Log("Stopping hacking UI!");
 
 
-        // Stop minigame
-        minigame.StopMinigame();
+        if (minigame != null)
+        {
+            minigame.StopMinigame();
+        }
 
 
-        // Hide hacking UI
         hackingCanvas.SetActive(false);
 
 
-        // Restore interaction prompts
+
         ObjectHighlighter highlighter =
             FindFirstObjectByType<ObjectHighlighter>();
 
@@ -96,7 +151,7 @@ public class HackingManager : MonoBehaviour
         }
 
 
-        // Restore camera movement
+
         MouseLook mouseLook =
             FindFirstObjectByType<MouseLook>();
 
@@ -106,12 +161,12 @@ public class HackingManager : MonoBehaviour
         }
 
 
-        // Lock cursor back to gameplay
+
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
 
-        // Restore player movement
+
         playerMovement.enabled = true;
 
 

@@ -1,8 +1,4 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class ObjectHighlighter : MonoBehaviour
@@ -22,10 +18,10 @@ public class ObjectHighlighter : MonoBehaviour
     public GameObject eTipInteractable;
     public GameObject eTipItem;
 
-    // Update is called once per frame
+
     void Update()
     {
-        // If a minigame UI is open, hide interaction UI and stop checking interactions
+        // Stop interaction checking while UI/minigame is open
         if (uiOpen)
         {
             ClearHighlight();
@@ -33,11 +29,14 @@ public class ObjectHighlighter : MonoBehaviour
             return;
         }
 
+
         HighlightRaycastCheck();
+
 
         if (isHighlighting)
         {
             TurnOnUI();
+
 
             if (lastHighlightedObject != null && Input.GetKeyDown(KeyCode.E))
             {
@@ -61,7 +60,8 @@ public class ObjectHighlighter : MonoBehaviour
                                 hotbarController.inventoryFullText.SetActive(true);
                             }
                         }
-                    } else if (lastHighlightedObject.CompareTag("Interactable"))
+                    }
+                    else if (lastHighlightedObject.CompareTag("Interactable"))
                     {
                         interactable.Interact();
                     }
@@ -78,40 +78,58 @@ public class ObjectHighlighter : MonoBehaviour
         }
     }
 
+
     void HighlightRaycastCheck()
     {
         Ray ray = new Ray(transform.position, transform.forward);
+
 
         if (Physics.Raycast(ray, out RaycastHit hit, raycastDistance, layerMask))
         {
             GameObject targetObject = hit.collider.gameObject;
 
+
             if (targetObject.CompareTag("Interactable") || targetObject.CompareTag("Item"))
             {
+                // LOCKPICK BOX CHECK
+                LockpickBox lockpickBox = targetObject.GetComponent<LockpickBox>();
+
+                if (lockpickBox != null && !lockpickBox.IsAvailable)
+                {
+                    ClearHighlight();
+                    return;
+                }
+
+
                 if (lastHighlightedObject != targetObject)
                 {
                     ClearHighlight();
                     AddHighlight(targetObject);
                 }
 
+
                 return;
             }
         }
 
+
         ClearHighlight();
     }
+
 
     void ClearHighlight()
     {
         if (lastHighlightedObject != null)
         {
-            if (lastHighlightedObject.CompareTag("Interactable") || lastHighlightedObject.CompareTag("Item"))
+            if (lastHighlightedObject.CompareTag("Interactable") ||
+                lastHighlightedObject.CompareTag("Item"))
             {
                 Renderer rend = lastHighlightedObject.GetComponent<Renderer>();
 
                 if (rend != null)
                 {
                     List<Material> mats = new(rend.materials);
+
                     if (mats.Count > 1)
                     {
                         mats.RemoveAt(mats.Count - 1);
@@ -120,22 +138,35 @@ public class ObjectHighlighter : MonoBehaviour
                 }
             }
 
+
             lastHighlightedObject = null;
         }
+
+
         isHighlighting = false;
-        // Turn off interaction UI immediately
         ResetUI();
     }
+
 
     void AddHighlight(GameObject targetObject)
     {
         Renderer rend = targetObject.GetComponent<Renderer>();
+
+        if (rend == null)
+            return;
+
+
         List<Material> matArray = new(rend.materials);
+
         matArray.Add(outlineMaterial);
+
         rend.materials = matArray.ToArray();
+
+
         lastHighlightedObject = targetObject;
         isHighlighting = true;
     }
+
 
     void TurnOnUI()
     {
@@ -144,10 +175,13 @@ public class ObjectHighlighter : MonoBehaviour
             ResetUI();
             return;
         }
+
+
         if (!crosshairOutline.activeSelf)
         {
             crosshairOutline.SetActive(true);
         }
+
 
         if (lastHighlightedObject.CompareTag("Interactable"))
         {
@@ -165,6 +199,7 @@ public class ObjectHighlighter : MonoBehaviour
         }
     }
 
+
     void ResetUI()
     {
         if (crosshairOutline.activeSelf)
@@ -172,10 +207,12 @@ public class ObjectHighlighter : MonoBehaviour
             crosshairOutline.SetActive(false);
         }
 
+
         if (eTipInteractable.activeSelf)
         {
             eTipInteractable.SetActive(false);
         }
+
 
         if (eTipItem.activeSelf)
         {
