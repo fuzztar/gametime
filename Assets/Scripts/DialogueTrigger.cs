@@ -23,6 +23,13 @@ public class DialogueTrigger : MonoBehaviour
     [SerializeField] private float focusHoldTime = 0.5f;
 
 
+    [Header("Pre Camera Sound")]
+    [SerializeField] private AudioSource soundEffectSource;
+    [SerializeField] private AudioClip preCameraSound;
+    [SerializeField] private float soundDelay = 0.5f;
+
+
+
     private bool triggered = false;
 
 
@@ -41,6 +48,7 @@ public class DialogueTrigger : MonoBehaviour
 
 
         triggered = true;
+
 
 
         if (dialogueManager == null)
@@ -62,21 +70,32 @@ public class DialogueTrigger : MonoBehaviour
         {
             Debug.Log("Starting focused dialogue!");
 
+
             dialogueManager.StartDialogue(
                 speakerName,
                 dialogueLines,
                 focusTarget,
                 focusSpeed,
-                focusHoldTime
+                focusHoldTime,
+                soundEffectSource,
+                preCameraSound,
+                soundDelay
             );
         }
         else
         {
             Debug.Log("Starting normal dialogue!");
 
+
             dialogueManager.StartDialogue(
                 speakerName,
-                dialogueLines
+                dialogueLines,
+                null,
+                focusSpeed,
+                focusHoldTime,
+                soundEffectSource,
+                preCameraSound,
+                soundDelay
             );
         }
     }

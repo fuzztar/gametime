@@ -11,9 +11,11 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private TMP_Text dialogueText;
 
 
+
     [Header("Audio")]
     [SerializeField] private AudioSource dialogueAudioSource;
     [SerializeField] private AudioSource soundEffectAudioSource;
+
 
 
     [Header("Player Control")]
@@ -32,17 +34,24 @@ public class DialogueManager : MonoBehaviour
 
 
 
+
+
     public void StartDialogue(
         string speakerName,
         List<DialogueLine> dialogueLines,
         Transform focusTarget = null,
         float focusSpeed = 3f,
-        float focusHoldTime = 0.5f
+        float focusHoldTime = 0.5f,
+        AudioSource preCameraSoundSource = null,
+        AudioClip preCameraSound = null,
+        float soundDelay = 0.5f
     )
     {
         Debug.Log("DialogueManager received dialogue!");
 
+
         StopAllCoroutines();
+
 
         StartCoroutine(
             PlayDialogue(
@@ -50,10 +59,14 @@ public class DialogueManager : MonoBehaviour
                 dialogueLines,
                 focusTarget,
                 focusSpeed,
-                focusHoldTime
+                focusHoldTime,
+                preCameraSoundSource,
+                preCameraSound,
+                soundDelay
             )
         );
     }
+
 
 
 
@@ -64,14 +77,17 @@ public class DialogueManager : MonoBehaviour
         List<DialogueLine> dialogueLines,
         Transform focusTarget,
         float focusSpeed,
-        float focusHoldTime
+        float focusHoldTime,
+        AudioSource preCameraSoundSource,
+        AudioClip preCameraSound,
+        float soundDelay
     )
     {
         Debug.Log("PlayDialogue started!");
 
 
 
-        // Disable player control
+        // Disable player controls
         if (playerMovement != null)
         {
             playerMovement.enabled = false;
@@ -85,7 +101,31 @@ public class DialogueManager : MonoBehaviour
 
 
 
-        // Focus camera if enabled
+
+
+        // Play sound BEFORE camera movement
+        if (preCameraSound != null &&
+            preCameraSoundSource != null)
+        {
+            preCameraSoundSource.PlayOneShot(
+                preCameraSound
+            );
+
+
+            if (soundDelay > 0)
+            {
+                yield return new WaitForSeconds(
+                    soundDelay
+                );
+            }
+        }
+
+
+
+
+
+
+        // Camera focus
         if (focusTarget != null &&
             CameraFocusManager.Instance != null)
         {
@@ -100,15 +140,13 @@ public class DialogueManager : MonoBehaviour
 
 
 
-        // Open dialogue UI
+
+
+
+        // Open dialogue box
         if (dialoguePanel != null)
         {
             dialoguePanel.SetActive(true);
-            Debug.Log("Dialogue panel opened!");
-        }
-        else
-        {
-            Debug.LogWarning("Dialogue Panel is not assigned!");
         }
 
 
@@ -126,18 +164,17 @@ public class DialogueManager : MonoBehaviour
 
 
 
-        // Lower music
+
+
         MusicManager.Instance?.LowerMusic();
+
+
+
 
 
 
         foreach (DialogueLine line in dialogueLines)
         {
-            Debug.Log("Playing line: " + line.text);
-
-
-
-            // Add text
             if (dialogueText != null)
             {
                 dialogueText.text += line.text + "\n\n";
@@ -145,7 +182,7 @@ public class DialogueManager : MonoBehaviour
 
 
 
-            // Play optional sound effect before voice line
+            // Sound before individual line
             if (line.preDialogueSound != null)
             {
                 if (soundEffectAudioSource != null)
@@ -166,10 +203,13 @@ public class DialogueManager : MonoBehaviour
 
 
 
-            // Play voice line
+
+
+            // Voice line
             if (line.audioClip != null)
             {
                 dialogueAudioSource.clip = line.audioClip;
+
                 dialogueAudioSource.Play();
 
 
@@ -183,6 +223,10 @@ public class DialogueManager : MonoBehaviour
                 yield return new WaitForSeconds(2f);
             }
         }
+
+
+
+
 
 
 
@@ -206,7 +250,9 @@ public class DialogueManager : MonoBehaviour
 
 
 
-        // Restore player
+
+
+
         if (playerMovement != null)
         {
             playerMovement.enabled = true;
@@ -222,6 +268,7 @@ public class DialogueManager : MonoBehaviour
         {
             dialoguePanel.SetActive(false);
         }
+
 
 
         Debug.Log("Dialogue finished!");
