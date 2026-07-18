@@ -15,6 +15,7 @@ public class ScrollingText : MonoBehaviour
     private int currentDisplayingText = 0;
 
     [HideInInspector] public GameObject currentObject;
+    [HideInInspector] public bool isConditional;
     [HideInInspector] public bool isScrolling = false;
     [SerializeField] private GameObject player;
 
@@ -35,13 +36,19 @@ public class ScrollingText : MonoBehaviour
             {
                 if (currentDisplayingText < itemInfo.Length - 1)
                 {
+                    isScrolling = true;
                     currentDisplayingText++;
                     ActivateText();
                 } else
                 {
+                    isScrolling = false;
                     player.GetComponent<PlayerMovement>().enabled = true;
                     player.GetComponentInChildren<MouseLook>().enabled = true;
                     player.GetComponentInChildren<ObjectHighlighter>().uiOpen = false;
+                    if (isConditional)
+                    {
+                        currentObject.GetComponent<TextInteractConditional>().textBoxOn = false;
+                    }
                     gameObject.SetActive(false);
                 }
             }
