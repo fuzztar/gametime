@@ -6,8 +6,6 @@ public class PlayerAbilities : MonoBehaviour
 
 
     [Header("Abilities")]
-    public bool HasHeardLockpickHint { get; private set; } = false;
-
     public bool CanLockpick { get; private set; } = false;
 
 
@@ -23,19 +21,6 @@ public class PlayerAbilities : MonoBehaviour
 
         Instance = this;
     }
-
-
-
-    public void UnlockLockpickBox()
-    {
-        HasHeardLockpickHint = true;
-
-        Debug.Log(
-            "Lockpick box is now available."
-        );
-    }
-
-
 
     public void UnlockLockpicking()
     {

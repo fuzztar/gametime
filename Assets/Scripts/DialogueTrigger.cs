@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.Playables;
 
 public class DialogueTrigger : MonoBehaviour
 {
@@ -28,9 +30,7 @@ public class DialogueTrigger : MonoBehaviour
     [SerializeField] private AudioClip preCameraSound;
     [SerializeField] private float soundDelay = 0.5f;
 
-
-
-    private bool triggered = false;
+    [HideInInspector] public bool triggered = false;
 
 
 

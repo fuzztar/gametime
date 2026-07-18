@@ -81,6 +81,7 @@ public class ObjectHighlighter : MonoBehaviour
 
     void HighlightRaycastCheck()
     {
+        Debug.DrawRay(transform.position, transform.forward * raycastDistance, Color.blue);
         Ray ray = new Ray(transform.position, transform.forward);
 
 

@@ -28,6 +28,10 @@ public class DoorInteraction : MonoBehaviour, IInteractable
 
 
     [Header("Locked Door Dialogue")]
+    private TextInteractConditional textInteract;
+    [SerializeField] private string[] text = new string[] { "The door is locked." };
+
+    [Header("Unlocked Door Dialogue")]
     [SerializeField] private DialogueManager dialogueManager;
     [SerializeField] private string speakerName = "UNKNOWN";
     [SerializeField] private List<DialogueLine> doorDialogue = new();
@@ -46,11 +50,6 @@ public class DoorInteraction : MonoBehaviour, IInteractable
 
 
 
-    [Header("UI")]
-    public ScrollingText scrollingText;
-
-
-
     private Quaternion closedRotation;
     private Quaternion openRotation;
 
@@ -60,6 +59,7 @@ public class DoorInteraction : MonoBehaviour, IInteractable
 
     private void Start()
     {
+        textInteract = GetComponent<TextInteractConditional>();
         closedRotation = door.rotation;
 
         openRotation = Quaternion.Euler(
@@ -119,23 +119,14 @@ public class DoorInteraction : MonoBehaviour, IInteractable
         // Locked door
         if (locked)
         {
-            Debug.Log("Door is locked!");
 
+            textInteract.text = text;
+            textInteract.StartText();
 
-
-            if (scrollingText != null)
-            {
-                scrollingText.itemInfo = new string[]
-                {
-                    "The door is locked."
-                };
-
-                scrollingText.gameObject.SetActive(true);
-            }
-
-
-
-            // Play locked door dialogue
+            return;
+        } else
+        {
+            // Play unlocked door dialogue
             if (dialogueManager != null &&
                 doorDialogue.Count > 0 &&
                 (!dialoguePlayed || !playDialogueOnlyOnce))
@@ -162,9 +153,6 @@ public class DoorInteraction : MonoBehaviour, IInteractable
                     );
                 }
             }
-
-
-            return;
         }
 
 

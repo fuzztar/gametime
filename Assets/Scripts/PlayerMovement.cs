@@ -252,7 +252,10 @@ public class PlayerMovement : MonoBehaviour
         return pos;
     }
 
-
+    public void ResetCamera()
+    {
+        transform.GetChild(0).GetChild(0).rotation = Quaternion.Euler( 0, 0, 0 );
+    }
 
     private void ResetPosition()
     {
