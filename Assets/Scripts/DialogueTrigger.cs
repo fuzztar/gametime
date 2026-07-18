@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,14 +16,11 @@ public class DialogueTrigger : MonoBehaviour
     [SerializeField] private bool triggerOnce = true;
 
 
-    [Header("Unlocks")]
-    [SerializeField] private bool unlockLockpickBox = false;
-
-
-    [Header("Sound Effect Before Dialogue")]
-    [SerializeField] private AudioSource audioSource;
-    [SerializeField] private AudioClip preDialogueSound;
-    [SerializeField] private float delayBeforeDialogue = 1f;
+    [Header("Camera Focus")]
+    [SerializeField] private bool useCameraFocus = false;
+    [SerializeField] private Transform focusTarget;
+    [SerializeField] private float focusSpeed = 3f;
+    [SerializeField] private float focusHoldTime = 0.5f;
 
 
     private bool triggered = false;
@@ -41,50 +37,47 @@ public class DialogueTrigger : MonoBehaviour
             return;
 
 
+        Debug.Log("Dialogue Trigger activated!");
+
+
         triggered = true;
 
 
-        StartCoroutine(PlaySequence());
-    }
-
-
-
-    private IEnumerator PlaySequence()
-    {
-        // Play optional sound effect
-        if (audioSource != null && preDialogueSound != null)
+        if (dialogueManager == null)
         {
-            audioSource.PlayOneShot(preDialogueSound);
-
-            yield return new WaitForSeconds(delayBeforeDialogue);
+            Debug.LogWarning("DialogueManager not assigned!");
+            return;
         }
 
 
-        // Start dialogue
-        if (dialogueManager != null)
+        if (dialogueLines.Count == 0)
         {
+            Debug.LogWarning("No dialogue lines assigned!");
+            return;
+        }
+
+
+
+        if (useCameraFocus && focusTarget != null)
+        {
+            Debug.Log("Starting focused dialogue!");
+
             dialogueManager.StartDialogue(
                 speakerName,
-                dialogueLines
+                dialogueLines,
+                focusTarget,
+                focusSpeed,
+                focusHoldTime
             );
         }
         else
         {
-            Debug.LogWarning("DialogueManager not assigned!");
-        }
+            Debug.Log("Starting normal dialogue!");
 
-
-        // Unlock lockpick box if needed
-        if (unlockLockpickBox)
-        {
-            if (PlayerAbilities.Instance != null)
-            {
-                PlayerAbilities.Instance.UnlockLockpickBox();
-            }
-            else
-            {
-                Debug.LogWarning("No PlayerAbilities found!");
-            }
+            dialogueManager.StartDialogue(
+                speakerName,
+                dialogueLines
+            );
         }
     }
 }

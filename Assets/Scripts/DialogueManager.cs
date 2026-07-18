@@ -21,6 +21,7 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private MouseLook mouseLook;
 
 
+
     private void Start()
     {
         if (dialoguePanel != null)
@@ -31,33 +32,52 @@ public class DialogueManager : MonoBehaviour
 
 
 
-    public void StartDialogue(string speakerName, List<DialogueLine> dialogueLines)
+    public void StartDialogue(
+        string speakerName,
+        List<DialogueLine> dialogueLines,
+        Transform focusTarget = null,
+        float focusSpeed = 3f,
+        float focusHoldTime = 0.5f
+    )
     {
+        Debug.Log("DialogueManager received dialogue!");
+
         StopAllCoroutines();
 
         StartCoroutine(
             PlayDialogue(
                 speakerName,
-                dialogueLines
+                dialogueLines,
+                focusTarget,
+                focusSpeed,
+                focusHoldTime
             )
         );
     }
 
 
 
+
+
     private IEnumerator PlayDialogue(
         string speakerName,
-        List<DialogueLine> dialogueLines
+        List<DialogueLine> dialogueLines,
+        Transform focusTarget,
+        float focusSpeed,
+        float focusHoldTime
     )
     {
-        // Disable player movement
+        Debug.Log("PlayDialogue started!");
+
+
+
+        // Disable player control
         if (playerMovement != null)
         {
             playerMovement.enabled = false;
         }
 
 
-        // Optional: disable looking
         if (mouseLook != null)
         {
             mouseLook.canLook = false;
@@ -65,22 +85,67 @@ public class DialogueManager : MonoBehaviour
 
 
 
-        dialoguePanel.SetActive(true);
+        // Focus camera if enabled
+        if (focusTarget != null &&
+            CameraFocusManager.Instance != null)
+        {
+            yield return StartCoroutine(
+                CameraFocusManager.Instance.FocusOnTarget(
+                    focusTarget,
+                    focusSpeed,
+                    focusHoldTime
+                )
+            );
+        }
 
-        speakerText.text = speakerName;
-        dialogueText.text = "";
 
 
+        // Open dialogue UI
+        if (dialoguePanel != null)
+        {
+            dialoguePanel.SetActive(true);
+            Debug.Log("Dialogue panel opened!");
+        }
+        else
+        {
+            Debug.LogWarning("Dialogue Panel is not assigned!");
+        }
+
+
+
+        if (speakerText != null)
+        {
+            speakerText.text = speakerName;
+        }
+
+
+        if (dialogueText != null)
+        {
+            dialogueText.text = "";
+        }
+
+
+
+        // Lower music
         MusicManager.Instance?.LowerMusic();
 
 
 
         foreach (DialogueLine line in dialogueLines)
         {
-            dialogueText.text += line.text + "\n\n";
+            Debug.Log("Playing line: " + line.text);
 
 
-            // Optional sound before voice line
+
+            // Add text
+            if (dialogueText != null)
+            {
+                dialogueText.text += line.text + "\n\n";
+            }
+
+
+
+            // Play optional sound effect before voice line
             if (line.preDialogueSound != null)
             {
                 if (soundEffectAudioSource != null)
@@ -101,11 +166,10 @@ public class DialogueManager : MonoBehaviour
 
 
 
-            // Voice line
+            // Play voice line
             if (line.audioClip != null)
             {
                 dialogueAudioSource.clip = line.audioClip;
-
                 dialogueAudioSource.Play();
 
 
@@ -122,16 +186,30 @@ public class DialogueManager : MonoBehaviour
 
 
 
-        // Restore player control
-        if (playerMovement != null)
+        // Return camera
+        if (focusTarget != null &&
+            CameraFocusManager.Instance != null)
         {
-            playerMovement.enabled = true;
+            yield return StartCoroutine(
+                CameraFocusManager.Instance.ReturnControl(
+                    focusSpeed
+                )
+            );
+        }
+        else
+        {
+            if (mouseLook != null)
+            {
+                mouseLook.canLook = true;
+            }
         }
 
 
-        if (mouseLook != null)
+
+        // Restore player
+        if (playerMovement != null)
         {
-            mouseLook.canLook = true;
+            playerMovement.enabled = true;
         }
 
 
@@ -139,6 +217,13 @@ public class DialogueManager : MonoBehaviour
         MusicManager.Instance?.RestoreMusic();
 
 
-        dialoguePanel.SetActive(false);
+
+        if (dialoguePanel != null)
+        {
+            dialoguePanel.SetActive(false);
+        }
+
+
+        Debug.Log("Dialogue finished!");
     }
 }
