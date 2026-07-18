@@ -92,12 +92,12 @@ public class ObjectHighlighter : MonoBehaviour
             if (targetObject.CompareTag("Interactable") || targetObject.CompareTag("Item"))
             {
                 // LOCKPICK BOX CHECK
-                LockpickBox lockpickBox = targetObject.GetComponent<LockpickBox>();
-
-                if (lockpickBox != null && !lockpickBox.IsAvailable)
-                {
-                    ClearHighlight();
-                    return;
+                if (targetObject.TryGetComponent<LockpickBox>(out LockpickBox lockpickBox)) {
+                    if (lockpickBox != null && !lockpickBox.IsAvailable)
+                    {
+                        ClearHighlight();
+                        return;
+                    }
                 }
 
 
