@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections;
 using System.IO;
 using UnityEngine;
 
@@ -83,7 +84,7 @@ public class LockpickBox : MonoBehaviour, IInteractable
         Destroy(gameObject, 0.2f);
     }
 
-    IEnumerator<WaitForSeconds> WaitFor(float seconds)
+    IEnumerator WaitFor(float seconds)
     {
         yield return new WaitForSeconds(seconds);
     }
