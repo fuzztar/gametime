@@ -9997,7 +9997,7 @@ Transform:
   m_GameObject: {fileID: 317942997}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.70710576, z: -0, w: 0.70710784}
-  m_LocalPosition: {x: 30.74, y: 5.07, z: -52.65}
+  m_LocalPosition: {x: 30.94, y: 5.07, z: -53.13}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -26601,6 +26601,7 @@ GameObject:
   - component: {fileID: 813779757}
   - component: {fileID: 813779756}
   - component: {fileID: 813779759}
+  - component: {fileID: 813779760}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -26726,6 +26727,28 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!95 &813779760
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 813779755}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: eb2bfcbe5412f1f468d68a1a2ed3cc77, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 1
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &813813310
 PrefabInstance:
   m_ObjectHideFlags: 0
