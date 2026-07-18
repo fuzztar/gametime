@@ -9,18 +9,28 @@ public class DoorInteraction : MonoBehaviour, IInteractable
 
     public bool isOpen = false;
 
+
     [Header("Lock Settings")]
     public bool locked = true;
 
+
+    [Header("Puzzle Settings")]
+    public bool requiresJigsaw = false;
+    public JigsawManager jigsawManager;
+
+
     [Header("Door Object")]
     public Transform door;
+
 
     private Quaternion closedRotation;
     private Quaternion openRotation;
 
     private Coroutine currentCoroutine;
 
+
     public ScrollingText scrollingText;
+
 
     private void Start()
     {
@@ -30,6 +40,7 @@ public class DoorInteraction : MonoBehaviour, IInteractable
             door.eulerAngles + new Vector3(0, openAngle, 0)
         );
     }
+
 
     private IEnumerator ToggleDoor()
     {
@@ -52,15 +63,34 @@ public class DoorInteraction : MonoBehaviour, IInteractable
         door.rotation = targetRotation;
     }
 
+
     public void Interact()
     {
         if (locked)
         {
+            // Open jigsaw puzzle if this door requires it
+            if (requiresJigsaw && jigsawManager != null)
+            {
+                Debug.Log("Opening jigsaw puzzle.");
+
+                jigsawManager.OpenPuzzle();
+                return;
+            }
+
+
             Debug.Log("Door is locked!");
-            scrollingText.itemInfo = new string[] { "The door is locked."};
-            scrollingText.gameObject.SetActive(true);
+
+            if (scrollingText != null)
+            {
+                scrollingText.itemInfo =
+                    new string[] { "The door is locked." };
+
+                scrollingText.gameObject.SetActive(true);
+            }
+
             return;
         }
+
 
         if (currentCoroutine != null)
         {
@@ -69,6 +99,7 @@ public class DoorInteraction : MonoBehaviour, IInteractable
 
         currentCoroutine = StartCoroutine(ToggleDoor());
     }
+
 
     public void UnlockDoor()
     {
