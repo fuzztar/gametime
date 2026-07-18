@@ -5,11 +5,17 @@ public class LockInteractable : MonoBehaviour, IInteractable
     [Header("Lockpick Manager")]
     [SerializeField] private LockpickManager lockpickManager;
 
+
+    [Header("Door")]
+    [SerializeField] private DoorInteraction linkedDoor;
+
+
     [Header("UI")]
     [SerializeField] private ScrollingText scrollingText;
 
 
     private bool unlocked = false;
+
 
 
     public void Interact()
@@ -59,11 +65,23 @@ public class LockInteractable : MonoBehaviour, IInteractable
     }
 
 
+
     public void Unlock()
     {
         unlocked = true;
 
         Debug.Log("Lock unlocked!");
+
+
+        if (linkedDoor != null)
+        {
+            linkedDoor.UnlockDoor();
+        }
+        else
+        {
+            Debug.LogWarning("No DoorInteraction assigned to lock!");
+        }
+
 
         Destroy(gameObject);
     }

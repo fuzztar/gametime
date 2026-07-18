@@ -16,6 +16,10 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private AudioSource soundEffectAudioSource;
 
 
+    [Header("Player Control")]
+    [SerializeField] private PlayerMovement playerMovement;
+    [SerializeField] private MouseLook mouseLook;
+
 
     private void Start()
     {
@@ -46,6 +50,21 @@ public class DialogueManager : MonoBehaviour
         List<DialogueLine> dialogueLines
     )
     {
+        // Disable player movement
+        if (playerMovement != null)
+        {
+            playerMovement.enabled = false;
+        }
+
+
+        // Optional: disable looking
+        if (mouseLook != null)
+        {
+            mouseLook.canLook = false;
+        }
+
+
+
         dialoguePanel.SetActive(true);
 
         speakerText.text = speakerName;
@@ -58,11 +77,10 @@ public class DialogueManager : MonoBehaviour
 
         foreach (DialogueLine line in dialogueLines)
         {
-            // Add text to transcript
             dialogueText.text += line.text + "\n\n";
 
 
-            // Play optional sound effect first
+            // Optional sound before voice line
             if (line.preDialogueSound != null)
             {
                 if (soundEffectAudioSource != null)
@@ -83,7 +101,7 @@ public class DialogueManager : MonoBehaviour
 
 
 
-            // Play voice line
+            // Voice line
             if (line.audioClip != null)
             {
                 dialogueAudioSource.clip = line.audioClip;
@@ -100,6 +118,20 @@ public class DialogueManager : MonoBehaviour
             {
                 yield return new WaitForSeconds(2f);
             }
+        }
+
+
+
+        // Restore player control
+        if (playerMovement != null)
+        {
+            playerMovement.enabled = true;
+        }
+
+
+        if (mouseLook != null)
+        {
+            mouseLook.canLook = true;
         }
 
 
