@@ -6,6 +6,7 @@ public class LockpickManager : MonoBehaviour
     public GameObject lockpickCanvas;
     public GameObject lockpickInstructions;
 
+
     [Header("Minigame")]
     public LockpickMinigame minigame;
 
@@ -13,6 +14,11 @@ public class LockpickManager : MonoBehaviour
     [Header("Player References")]
     public PlayerMovement playerMovement;
     public PlayerInteract playerInteract;
+
+
+    [Header("Completion Sound")]
+    [SerializeField] private AudioSource completionAudioSource;
+    [SerializeField] private AudioClip completionSound;
 
 
     private LockInteractable currentLock;
@@ -24,16 +30,13 @@ public class LockpickManager : MonoBehaviour
         currentLock = lockToPick;
 
 
-        // Disable player movement and interaction
         playerMovement.enabled = false;
         playerInteract.canInteract = false;
 
 
-        // Open lockpick UI
         lockpickCanvas.SetActive(true);
 
 
-        // Show instruction text
         if (lockpickInstructions != null)
         {
             lockpickInstructions.SetActive(true);
@@ -59,10 +62,24 @@ public class LockpickManager : MonoBehaviour
 
     public void CompleteLock()
     {
+        Debug.Log("Lockpick completed!");
+
+
+        // Play completion sound
+        if (completionAudioSource != null &&
+            completionSound != null)
+        {
+            completionAudioSource.PlayOneShot(
+                completionSound
+            );
+        }
+
+
         if (currentLock != null)
         {
             currentLock.Unlock();
         }
+
 
         StopLockpicking();
     }
@@ -86,7 +103,6 @@ public class LockpickManager : MonoBehaviour
         }
 
 
-        // Hide instruction text
         if (lockpickInstructions != null)
         {
             lockpickInstructions.SetActive(false);
