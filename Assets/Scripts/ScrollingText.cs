@@ -3,6 +3,7 @@ using UnityEngine;
 using TMPro;
 using System;
 
+
 public class ScrollingText : MonoBehaviour
 {
     [Header("Text Settings")]
@@ -15,9 +16,13 @@ public class ScrollingText : MonoBehaviour
 
     [HideInInspector] public GameObject currentObject;
     [HideInInspector] public bool isScrolling = false;
+    [SerializeField] private GameObject player;
 
     private void OnEnable()
     {
+        player.GetComponent<PlayerMovement>().enabled = false;
+        player.GetComponentInChildren<MouseLook>().enabled = false;
+        player.GetComponentInChildren<ObjectHighlighter>().uiOpen = true;
         currentDisplayingText = 0;
         ActivateText();
     }
@@ -34,6 +39,9 @@ public class ScrollingText : MonoBehaviour
                     ActivateText();
                 } else
                 {
+                    player.GetComponent<PlayerMovement>().enabled = true;
+                    player.GetComponentInChildren<MouseLook>().enabled = true;
+                    player.GetComponentInChildren<ObjectHighlighter>().uiOpen = false;
                     gameObject.SetActive(false);
                 }
             }
@@ -57,13 +65,11 @@ public class ScrollingText : MonoBehaviour
     IEnumerator AnimateText()
     {
         isScrolling = true;
-        Debug.Log("isScrolling = " + isScrolling);
         for (int i = 0; i <= itemInfo[currentDisplayingText].Length; i++)
         {
             itemInfoText.text = itemInfo[currentDisplayingText].Substring(0, i);
             yield return new WaitForSeconds(textSpeed);
         }
         isScrolling = false;
-        Debug.Log("isScrolling = " + isScrolling);
     }
 }

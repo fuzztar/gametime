@@ -137,7 +137,7 @@ public class ObjectHighlighter : MonoBehaviour
         isHighlighting = true;
     }
 
-    void TurnOnUI()
+    public void TurnOnUI()
     {
         if (lastHighlightedObject == null)
         {
@@ -165,7 +165,7 @@ public class ObjectHighlighter : MonoBehaviour
         }
     }
 
-    void ResetUI()
+    public void ResetUI()
     {
         if (crosshairOutline.activeSelf)
         {
