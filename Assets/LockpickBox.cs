@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Collections;
+using System.IO;
 using UnityEngine;
 
 public class LockpickBox : MonoBehaviour, IInteractable
@@ -9,6 +11,7 @@ public class LockpickBox : MonoBehaviour, IInteractable
     [SerializeField] private string speakerName = "UNKNOWN";
     [SerializeField] private List<DialogueLine> dialogueLines = new();
 
+    private TextInteractConditional textInteract;
 
     private bool collected = false;
     public bool IsAvailable
@@ -20,6 +23,10 @@ public class LockpickBox : MonoBehaviour, IInteractable
         }
     }
 
+    void Start()
+    {
+        textInteract = GetComponent<TextInteractConditional>();
+    }
 
     public void Interact()
     {
@@ -44,6 +51,16 @@ public class LockpickBox : MonoBehaviour, IInteractable
             return;
         }
 
+        textInteract.StartText();
+
+        StartCoroutine(Wait());
+    }
+
+    IEnumerator Wait()
+    {
+        Debug.Log("Started waiting");
+        yield return new WaitWhile(() => textInteract.textBoxOn);
+        Debug.Log("Finished waiting");
 
         collected = true;
 
