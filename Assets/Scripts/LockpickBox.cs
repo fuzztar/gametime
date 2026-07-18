@@ -11,6 +11,8 @@ public class LockpickBox : MonoBehaviour, IInteractable
     [SerializeField] private string speakerName = "UNKNOWN";
     [SerializeField] private List<DialogueLine> dialogueLines = new();
 
+    [SerializeField] private DialogueTrigger dialogueTrigger;
+
     private TextInteractConditional textInteract;
 
     private bool collected = false;
@@ -18,8 +20,7 @@ public class LockpickBox : MonoBehaviour, IInteractable
     {
         get
         {
-            return PlayerAbilities.Instance != null &&
-                   PlayerAbilities.Instance.HasHeardLockpickHint;
+            return dialogueTrigger.triggered;
         }
     }
 
@@ -34,15 +35,8 @@ public class LockpickBox : MonoBehaviour, IInteractable
             return;
 
 
-        if (PlayerAbilities.Instance == null)
-        {
-            Debug.LogWarning("No PlayerAbilities found!");
-            return;
-        }
-
-
         // Box is not available yet
-        if (!PlayerAbilities.Instance.HasHeardLockpickHint)
+        if (!IsAvailable)
         {
             Debug.Log(
                 "Player does not know about the lockpicks yet."

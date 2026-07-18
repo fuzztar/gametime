@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.XR;
 
 public class MouseLook : MonoBehaviour
 {
@@ -13,37 +10,38 @@ public class MouseLook : MonoBehaviour
     private float xRotation = 0f;
     private float yRotation = 0f;
 
-
     void Start()
     {
-        // Locks cursor during normal gameplay
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-    }
 
+        SyncRotation();
+    }
 
     void Update()
     {
         if (!canLook)
             return;
 
-
-        // Get mouse movement
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
 
-
-        // Vertical camera rotation
         xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
-
-        // Horizontal player rotation
         yRotation += mouseX;
 
-
         transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+        playerBody.rotation = Quaternion.Euler(0f, yRotation, 0f);
+    }
 
-        playerBody.Rotate(Vector3.up * mouseX);
+    public void SyncRotation()
+    {
+        xRotation = transform.localEulerAngles.x;
+
+        if (xRotation > 180f)
+            xRotation -= 360f;
+
+        yRotation = playerBody.eulerAngles.y;
     }
 }

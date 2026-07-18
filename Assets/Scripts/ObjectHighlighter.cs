@@ -81,6 +81,7 @@ public class ObjectHighlighter : MonoBehaviour
 
     void HighlightRaycastCheck()
     {
+        Debug.DrawRay(transform.position, transform.forward * raycastDistance, Color.blue);
         Ray ray = new Ray(transform.position, transform.forward);
 
 
@@ -92,12 +93,12 @@ public class ObjectHighlighter : MonoBehaviour
             if (targetObject.CompareTag("Interactable") || targetObject.CompareTag("Item"))
             {
                 // LOCKPICK BOX CHECK
-                LockpickBox lockpickBox = targetObject.GetComponent<LockpickBox>();
-
-                if (lockpickBox != null && !lockpickBox.IsAvailable)
-                {
-                    ClearHighlight();
-                    return;
+                if (targetObject.TryGetComponent<LockpickBox>(out LockpickBox lockpickBox)) {
+                    if (lockpickBox != null && !lockpickBox.IsAvailable)
+                    {
+                        ClearHighlight();
+                        return;
+                    }
                 }
 
 
