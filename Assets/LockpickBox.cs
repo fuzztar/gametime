@@ -11,7 +11,7 @@ public class LockpickBox : MonoBehaviour, IInteractable
     [SerializeField] private string speakerName = "UNKNOWN";
     [SerializeField] private List<DialogueLine> dialogueLines = new();
 
-    [SerializeField] private TextInteractConditional textInteract;
+    private TextInteractConditional textInteract;
 
     private bool collected = false;
     public bool IsAvailable
