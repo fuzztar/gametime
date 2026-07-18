@@ -10,34 +10,32 @@ public class DoorInteraction : MonoBehaviour, IInteractable
 
     public bool isOpen = false;
 
-
     [Header("Lock Settings")]
     public bool locked = true;
-
 
     [Header("Door Object")]
     public Transform door;
 
+    [Header("Audio")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip openSound;
+    [SerializeField] private AudioClip closeSound;
 
-    [Header("Locked Message")]
-    public ScrollingText scrollingText;
-
-
-    [Header("Opening Dialogue")]
+    [Header("Dialogue (Optional)")]
     [SerializeField] private DialogueManager dialogueManager;
     [SerializeField] private string speakerName = "UNKNOWN";
-    [SerializeField] private List<DialogueLine> openDialogue = new();
+    [SerializeField] private List<DialogueLine> doorDialogue = new();
 
+    [SerializeField] private bool playDialogueOnlyOnce = true;
+    private bool dialoguePlayed = false;
 
+    [Header("UI")]
+    public ScrollingText scrollingText;
 
     private Quaternion closedRotation;
     private Quaternion openRotation;
 
     private Coroutine currentCoroutine;
-
-    private bool playedOpenDialogue = false;
-
-
 
     private void Start()
     {
@@ -48,16 +46,27 @@ public class DoorInteraction : MonoBehaviour, IInteractable
         );
     }
 
-
-
     private IEnumerator ToggleDoor()
     {
+        bool opening = !isOpen;
+
         Quaternion targetRotation =
-            isOpen ? closedRotation : openRotation;
+            opening ? openRotation : closedRotation;
 
+        isOpen = opening;
 
-        isOpen = !isOpen;
-
+        // Play door sound
+        if (audioSource != null)
+        {
+            if (opening && openSound != null)
+            {
+                audioSource.PlayOneShot(openSound);
+            }
+            else if (!opening && closeSound != null)
+            {
+                audioSource.PlayOneShot(closeSound);
+            }
+        }
 
         while (Quaternion.Angle(door.rotation, targetRotation) > 0.01f)
         {
@@ -70,26 +79,8 @@ public class DoorInteraction : MonoBehaviour, IInteractable
             yield return null;
         }
 
-
         door.rotation = targetRotation;
-
-
-        // Play dialogue after door finishes opening
-        if (isOpen && !playedOpenDialogue)
-        {
-            playedOpenDialogue = true;
-
-            if (dialogueManager != null)
-            {
-                dialogueManager.StartDialogue(
-                    speakerName,
-                    openDialogue
-                );
-            }
-        }
     }
-
-
 
     public void Interact()
     {
@@ -110,18 +101,27 @@ public class DoorInteraction : MonoBehaviour, IInteractable
             return;
         }
 
+        // Play dialogue the first time the door is opened
+        if (!isOpen &&
+            dialogueManager != null &&
+            doorDialogue.Count > 0 &&
+            (!dialoguePlayed || !playDialogueOnlyOnce))
+        {
+            dialoguePlayed = true;
 
+            dialogueManager.StartDialogue(
+                speakerName,
+                doorDialogue
+            );
+        }
 
         if (currentCoroutine != null)
         {
             StopCoroutine(currentCoroutine);
         }
 
-
         currentCoroutine = StartCoroutine(ToggleDoor());
     }
-
-
 
     public void UnlockDoor()
     {
