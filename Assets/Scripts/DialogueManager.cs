@@ -10,8 +10,11 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private TMP_Text speakerText;
     [SerializeField] private TMP_Text dialogueText;
 
+
     [Header("Audio")]
     [SerializeField] private AudioSource dialogueAudioSource;
+    [SerializeField] private AudioSource soundEffectAudioSource;
+
 
 
     private void Start()
@@ -23,11 +26,19 @@ public class DialogueManager : MonoBehaviour
     }
 
 
+
     public void StartDialogue(string speakerName, List<DialogueLine> dialogueLines)
     {
         StopAllCoroutines();
-        StartCoroutine(PlayDialogue(speakerName, dialogueLines));
+
+        StartCoroutine(
+            PlayDialogue(
+                speakerName,
+                dialogueLines
+            )
+        );
     }
+
 
 
     private IEnumerator PlayDialogue(
@@ -40,17 +51,45 @@ public class DialogueManager : MonoBehaviour
         speakerText.text = speakerName;
         dialogueText.text = "";
 
-        // Lower background music while dialogue is playing
+
         MusicManager.Instance?.LowerMusic();
+
+
 
         foreach (DialogueLine line in dialogueLines)
         {
+            // Add text to transcript
             dialogueText.text += line.text + "\n\n";
 
+
+            // Play optional sound effect first
+            if (line.preDialogueSound != null)
+            {
+                if (soundEffectAudioSource != null)
+                {
+                    soundEffectAudioSource.PlayOneShot(
+                        line.preDialogueSound
+                    );
+                }
+
+
+                if (line.soundDelay > 0)
+                {
+                    yield return new WaitForSeconds(
+                        line.soundDelay
+                    );
+                }
+            }
+
+
+
+            // Play voice line
             if (line.audioClip != null)
             {
                 dialogueAudioSource.clip = line.audioClip;
+
                 dialogueAudioSource.Play();
+
 
                 while (dialogueAudioSource.isPlaying)
                 {
@@ -63,8 +102,10 @@ public class DialogueManager : MonoBehaviour
             }
         }
 
-        // Restore music volume
+
+
         MusicManager.Instance?.RestoreMusic();
+
 
         dialoguePanel.SetActive(false);
     }

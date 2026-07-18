@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class DoorInteraction : MonoBehaviour, IInteractable
@@ -14,13 +15,19 @@ public class DoorInteraction : MonoBehaviour, IInteractable
     public bool locked = true;
 
 
-    [Header("Puzzle Settings")]
-    public bool requiresJigsaw = false;
-    public JigsawManager jigsawManager;
-
-
     [Header("Door Object")]
     public Transform door;
+
+
+    [Header("Locked Message")]
+    public ScrollingText scrollingText;
+
+
+    [Header("Opening Dialogue")]
+    [SerializeField] private DialogueManager dialogueManager;
+    [SerializeField] private string speakerName = "UNKNOWN";
+    [SerializeField] private List<DialogueLine> openDialogue = new();
+
 
 
     private Quaternion closedRotation;
@@ -28,8 +35,8 @@ public class DoorInteraction : MonoBehaviour, IInteractable
 
     private Coroutine currentCoroutine;
 
+    private bool playedOpenDialogue = false;
 
-    public ScrollingText scrollingText;
 
 
     private void Start()
@@ -42,12 +49,15 @@ public class DoorInteraction : MonoBehaviour, IInteractable
     }
 
 
+
     private IEnumerator ToggleDoor()
     {
         Quaternion targetRotation =
             isOpen ? closedRotation : openRotation;
 
+
         isOpen = !isOpen;
+
 
         while (Quaternion.Angle(door.rotation, targetRotation) > 0.01f)
         {
@@ -60,30 +70,39 @@ public class DoorInteraction : MonoBehaviour, IInteractable
             yield return null;
         }
 
+
         door.rotation = targetRotation;
+
+
+        // Play dialogue after door finishes opening
+        if (isOpen && !playedOpenDialogue)
+        {
+            playedOpenDialogue = true;
+
+            if (dialogueManager != null)
+            {
+                dialogueManager.StartDialogue(
+                    speakerName,
+                    openDialogue
+                );
+            }
+        }
     }
+
 
 
     public void Interact()
     {
         if (locked)
         {
-            // Open jigsaw puzzle if this door requires it
-            if (requiresJigsaw && jigsawManager != null)
-            {
-                Debug.Log("Opening jigsaw puzzle.");
-
-                jigsawManager.OpenPuzzle();
-                return;
-            }
-
-
             Debug.Log("Door is locked!");
 
             if (scrollingText != null)
             {
-                scrollingText.itemInfo =
-                    new string[] { "The door is locked." };
+                scrollingText.itemInfo = new string[]
+                {
+                    "The door is locked."
+                };
 
                 scrollingText.gameObject.SetActive(true);
             }
@@ -92,13 +111,16 @@ public class DoorInteraction : MonoBehaviour, IInteractable
         }
 
 
+
         if (currentCoroutine != null)
         {
             StopCoroutine(currentCoroutine);
         }
 
+
         currentCoroutine = StartCoroutine(ToggleDoor());
     }
+
 
 
     public void UnlockDoor()

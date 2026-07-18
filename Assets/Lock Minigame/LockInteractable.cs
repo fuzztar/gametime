@@ -64,5 +64,7 @@ public class LockInteractable : MonoBehaviour, IInteractable
         unlocked = true;
 
         Debug.Log("Lock unlocked!");
+
+        Destroy(gameObject);
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,7 +21,14 @@ public class DialogueTrigger : MonoBehaviour
     [SerializeField] private bool unlockLockpickBox = false;
 
 
+    [Header("Sound Effect Before Dialogue")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip preDialogueSound;
+    [SerializeField] private float delayBeforeDialogue = 1f;
+
+
     private bool triggered = false;
+
 
 
     private void OnTriggerEnter(Collider other)
@@ -36,6 +44,23 @@ public class DialogueTrigger : MonoBehaviour
         triggered = true;
 
 
+        StartCoroutine(PlaySequence());
+    }
+
+
+
+    private IEnumerator PlaySequence()
+    {
+        // Play optional sound effect
+        if (audioSource != null && preDialogueSound != null)
+        {
+            audioSource.PlayOneShot(preDialogueSound);
+
+            yield return new WaitForSeconds(delayBeforeDialogue);
+        }
+
+
+        // Start dialogue
         if (dialogueManager != null)
         {
             dialogueManager.StartDialogue(
@@ -49,6 +74,7 @@ public class DialogueTrigger : MonoBehaviour
         }
 
 
+        // Unlock lockpick box if needed
         if (unlockLockpickBox)
         {
             if (PlayerAbilities.Instance != null)
@@ -57,9 +83,7 @@ public class DialogueTrigger : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning(
-                    "No PlayerAbilities found!"
-                );
+                Debug.LogWarning("No PlayerAbilities found!");
             }
         }
     }
