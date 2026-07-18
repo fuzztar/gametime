@@ -409,3 +409,4 @@ MonoBehaviour:
   itemInfoText: {fileID: 8464283797658551024}
   currentObject: {fileID: 0}
   isScrolling: 0
+  player: {fileID: 0}
