@@ -53,10 +53,14 @@ public class LockpickBox : MonoBehaviour, IInteractable
 
         textInteract.StartText();
 
-        while (textInteract.textBoxOn)
-        {
-            StartCoroutine(WaitFor(0.1f));
-        }
+        StartCoroutine(Wait());
+    }
+
+    IEnumerator Wait()
+    {
+        Debug.Log("Started waiting");
+        yield return new WaitWhile(() => textInteract.textBoxOn);
+        Debug.Log("Finished waiting");
 
         collected = true;
 
@@ -82,10 +86,5 @@ public class LockpickBox : MonoBehaviour, IInteractable
 
 
         Destroy(gameObject, 0.2f);
-    }
-
-    IEnumerator WaitFor(float seconds)
-    {
-        yield return new WaitForSeconds(seconds);
     }
 }
