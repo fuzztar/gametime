@@ -1,24 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
 public class DialogueManager : MonoBehaviour
 {
     [Header("Dialogue UI")]
-    public GameObject dialoguePanel;
-    public TMP_Text speakerText;
-    public TMP_Text dialogueText;
-
-
-    [Header("Dialogue Settings")]
-    public string speakerName = "UNKNOWN";
-
-    public List<DialogueLine> dialogueLines;
-
+    [SerializeField] private GameObject dialoguePanel;
+    [SerializeField] private TMP_Text speakerText;
+    [SerializeField] private TMP_Text dialogueText;
 
     [Header("Audio")]
-    public AudioSource audioSource;
+    [SerializeField] private AudioSource dialogueAudioSource;
 
 
     private void Start()
@@ -30,33 +23,36 @@ public class DialogueManager : MonoBehaviour
     }
 
 
-    public void StartDialogue()
+    public void StartDialogue(string speakerName, List<DialogueLine> dialogueLines)
     {
-        StartCoroutine(PlayDialogue());
+        StopAllCoroutines();
+        StartCoroutine(PlayDialogue(speakerName, dialogueLines));
     }
 
 
-    private IEnumerator PlayDialogue()
+    private IEnumerator PlayDialogue(
+        string speakerName,
+        List<DialogueLine> dialogueLines
+    )
     {
         dialoguePanel.SetActive(true);
 
         speakerText.text = speakerName;
-
         dialogueText.text = "";
 
+        // Lower background music while dialogue is playing
+        MusicManager.Instance?.LowerMusic();
 
         foreach (DialogueLine line in dialogueLines)
         {
-            dialogueText.text += "\n\n" + line.text;
-
+            dialogueText.text += line.text + "\n\n";
 
             if (line.audioClip != null)
             {
-                audioSource.clip = line.audioClip;
-                audioSource.Play();
+                dialogueAudioSource.clip = line.audioClip;
+                dialogueAudioSource.Play();
 
-
-                while (audioSource.isPlaying)
+                while (dialogueAudioSource.isPlaying)
                 {
                     yield return null;
                 }
@@ -67,6 +63,8 @@ public class DialogueManager : MonoBehaviour
             }
         }
 
+        // Restore music volume
+        MusicManager.Instance?.RestoreMusic();
 
         dialoguePanel.SetActive(false);
     }

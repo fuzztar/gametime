@@ -24821,10 +24821,6 @@ MonoBehaviour:
   dialoguePanel: {fileID: 1946765522}
   speakerText: {fileID: 1978808960}
   dialogueText: {fileID: 1967803353}
-  speakerName: ROBERT
-  dialogueLines:
-  - text: "[I can tell it\u2019s been a while since me or anyone has been here]\r\n"
-    audioClip: {fileID: 8300000, guid: ef4806d810b7b3a49a8a800ae598bef8, type: 3}
   audioSource: {fileID: 863776305}
 --- !u!82 &863776305
 AudioSource:
@@ -44727,6 +44723,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   dialogueManager: {fileID: 863776304}
+  speakerName: UNKNOWN
+  dialogueLines: []
+  triggerOnce: 1
 --- !u!65 &1666006826
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -53388,7 +53387,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 505.5, y: -75}
+  m_AnchoredPosition: {x: 509, y: -11}
   m_SizeDelta: {x: 1000, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1967803353
