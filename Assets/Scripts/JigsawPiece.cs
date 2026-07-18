@@ -56,6 +56,8 @@ public class JigsawPiece : MonoBehaviour,
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        Debug.Log("Started dragging: " + gameObject.name);
+
         if (locked)
             return;
 

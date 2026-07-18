@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class DoorInteraction : MonoBehaviour, IInteractable
@@ -9,18 +10,34 @@ public class DoorInteraction : MonoBehaviour, IInteractable
 
     public bool isOpen = false;
 
+
     [Header("Lock Settings")]
     public bool locked = true;
 
+
     [Header("Door Object")]
     public Transform door;
+
+
+    [Header("Locked Message")]
+    public ScrollingText scrollingText;
+
+
+    [Header("Opening Dialogue")]
+    [SerializeField] private DialogueManager dialogueManager;
+    [SerializeField] private string speakerName = "UNKNOWN";
+    [SerializeField] private List<DialogueLine> openDialogue = new();
+
+
 
     private Quaternion closedRotation;
     private Quaternion openRotation;
 
     private Coroutine currentCoroutine;
 
-    public ScrollingText scrollingText;
+    private bool playedOpenDialogue = false;
+
+
 
     private void Start()
     {
@@ -31,12 +48,16 @@ public class DoorInteraction : MonoBehaviour, IInteractable
         );
     }
 
+
+
     private IEnumerator ToggleDoor()
     {
         Quaternion targetRotation =
             isOpen ? closedRotation : openRotation;
 
+
         isOpen = !isOpen;
+
 
         while (Quaternion.Angle(door.rotation, targetRotation) > 0.01f)
         {
@@ -49,26 +70,58 @@ public class DoorInteraction : MonoBehaviour, IInteractable
             yield return null;
         }
 
+
         door.rotation = targetRotation;
+
+
+        // Play dialogue after door finishes opening
+        if (isOpen && !playedOpenDialogue)
+        {
+            playedOpenDialogue = true;
+
+            if (dialogueManager != null)
+            {
+                dialogueManager.StartDialogue(
+                    speakerName,
+                    openDialogue
+                );
+            }
+        }
     }
+
+
 
     public void Interact()
     {
         if (locked)
         {
             Debug.Log("Door is locked!");
-            scrollingText.itemInfo = new string[] { "The door is locked."};
-            scrollingText.gameObject.SetActive(true);
+
+            if (scrollingText != null)
+            {
+                scrollingText.itemInfo = new string[]
+                {
+                    "The door is locked."
+                };
+
+                scrollingText.gameObject.SetActive(true);
+            }
+
             return;
         }
+
+
 
         if (currentCoroutine != null)
         {
             StopCoroutine(currentCoroutine);
         }
 
+
         currentCoroutine = StartCoroutine(ToggleDoor());
     }
+
+
 
     public void UnlockDoor()
     {

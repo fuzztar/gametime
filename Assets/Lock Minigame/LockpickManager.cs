@@ -2,51 +2,105 @@ using UnityEngine;
 
 public class LockpickManager : MonoBehaviour
 {
+    [Header("Lockpick UI")]
     public GameObject lockpickCanvas;
+    public GameObject lockpickInstructions;
+
+    [Header("Minigame")]
     public LockpickMinigame minigame;
 
+
+    [Header("Player References")]
     public PlayerMovement playerMovement;
     public PlayerInteract playerInteract;
 
+
     private LockInteractable currentLock;
+
+
 
     public void StartLockpicking(LockInteractable lockToPick)
     {
         currentLock = lockToPick;
 
-        // Disable player movement
+
+        // Disable player movement and interaction
         playerMovement.enabled = false;
         playerInteract.canInteract = false;
 
+
+        // Open lockpick UI
         lockpickCanvas.SetActive(true);
 
-        FindFirstObjectByType<ObjectHighlighter>().uiOpen = true;
+
+        // Show instruction text
+        if (lockpickInstructions != null)
+        {
+            lockpickInstructions.SetActive(true);
+        }
+
+
+        ObjectHighlighter highlighter =
+            FindFirstObjectByType<ObjectHighlighter>();
+
+        if (highlighter != null)
+        {
+            highlighter.uiOpen = true;
+        }
+
 
         minigame.StartMinigame();
+
 
         Debug.Log("Lockpicking started!");
     }
 
 
+
     public void CompleteLock()
     {
-        currentLock.Unlock();
+        if (currentLock != null)
+        {
+            currentLock.Unlock();
+        }
 
         StopLockpicking();
     }
+
 
 
     public void StopLockpicking()
     {
         Debug.Log("Stopping lockpick UI!");
 
-        minigame.StopMinigame();
 
-        Debug.Log("Disabling canvas: " + lockpickCanvas.name);
+        if (minigame != null)
+        {
+            minigame.StopMinigame();
+        }
 
-        lockpickCanvas.SetActive(false);
 
-        FindFirstObjectByType<ObjectHighlighter>().uiOpen = false;
+        if (lockpickCanvas != null)
+        {
+            lockpickCanvas.SetActive(false);
+        }
+
+
+        // Hide instruction text
+        if (lockpickInstructions != null)
+        {
+            lockpickInstructions.SetActive(false);
+        }
+
+
+        ObjectHighlighter highlighter =
+            FindFirstObjectByType<ObjectHighlighter>();
+
+        if (highlighter != null)
+        {
+            highlighter.uiOpen = false;
+        }
+
 
         playerMovement.enabled = true;
         playerInteract.canInteract = true;
