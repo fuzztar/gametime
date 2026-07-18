@@ -6266,6 +6266,9 @@ MonoBehaviour:
   focusTarget: {fileID: 0}
   focusSpeed: 3
   focusHoldTime: 0.5
+  soundEffectSource: {fileID: 0}
+  preCameraSound: {fileID: 0}
+  soundDelay: 0.5
 --- !u!65 &239313570
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -19626,6 +19629,9 @@ MonoBehaviour:
   focusTarget: {fileID: 714815884}
   focusSpeed: 3
   focusHoldTime: 0.5
+  soundEffectSource: {fileID: 0}
+  preCameraSound: {fileID: 0}
+  soundDelay: 0.5
 --- !u!65 &653152878
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -37953,7 +37959,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.020000009, y: 0.020000005, z: 0.019999998}
   m_Center: {x: 0.000000029802322, y: 0, z: 0.000000014901161}
---- !u!114 &1341354490
+--- !u!114 &1341354494
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -37962,12 +37968,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1341354484}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1cafac994eb54364bb6005a810ddbe7c, type: 3}
+  m_Script: {fileID: 11500000, guid: 7601d91de8a943841a8c2edeca1dfb29, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TextInteract
+  m_EditorClassIdentifier: Assembly-CSharp::TextInteractConditional
   text:
-  - You found a box of lockpicks
+  - You found a box of lockpicks.
   scrollingText: {fileID: 445635254}
+  textBoxOn: 0
 --- !u!1001 &1341455055
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -45771,6 +45778,9 @@ MonoBehaviour:
   focusTarget: {fileID: 0}
   focusSpeed: 3
   focusHoldTime: 0.5
+  soundEffectSource: {fileID: 0}
+  preCameraSound: {fileID: 0}
+  soundDelay: 0.5
 --- !u!65 &1666006826
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -52957,6 +52967,9 @@ MonoBehaviour:
   focusTarget: {fileID: 1141751402}
   focusSpeed: 1
   focusHoldTime: 0.5
+  soundEffectSource: {fileID: 0}
+  preCameraSound: {fileID: 0}
+  soundDelay: 0.5
 --- !u!65 &1892826896
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -54872,7 +54885,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8391222552659086748, guid: 5a07dbc331e8a424a93f848a03c769d3,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1341354490}
+      addedObject: {fileID: 1341354494}
   m_SourcePrefab: {fileID: 100100000, guid: 5a07dbc331e8a424a93f848a03c769d3, type: 3}
 --- !u!1001 &1964152459
 PrefabInstance:
